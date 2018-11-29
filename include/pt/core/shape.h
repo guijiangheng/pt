@@ -8,6 +8,8 @@ namespace pt {
 
 class Shape {
 public:
+    virtual ~Shape() = default;
+
     virtual bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const = 0;
 
     virtual bool intersect(const Ray& ray) const {

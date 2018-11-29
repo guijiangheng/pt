@@ -3,9 +3,10 @@
 #include <fstream>
 #include <iostream>
 
-#include <pt/core/ray.h>
-#include <pt/shapes/sphere.h>
+#include <pt/core/film.h>
 #include <pt/core/primitive.h>
+#include <pt/shapes/sphere.h>
+#include <pt/camera/perspective.h>
 
 using namespace pt;
 using namespace std;
@@ -39,52 +40,48 @@ Vector3 color(const vector<GeometricPrimitive>& scene, const Ray& r) {
         return color(scene, Ray(o, normalize(target - o))) * 0.5;
     }
 
-    auto t = (r.d.y() + 1) / 2;
-    return lerp(Vector3(0.5, 0.7, 1.0), Vector3(1, 1, 1), t);
+    auto t = (r.d.y + 1) / 2;
+    return lerp(Vector3(1, 1, 1), Vector3(0.5, 0.7, 1.0), t);
 }
-
-
 
 int main() {
     constexpr auto width = 400;
     constexpr auto height = 200;
     constexpr auto samples = 100;
     
-    vector<Vector3> pixels(width * height);
-
+    vector<GeometricPrimitive> scene;
     GeometricPrimitive a(Frame(), std::make_shared<Sphere>(0.5));
     GeometricPrimitive b(Frame::translate(0, -100.5, 0), std::make_shared<Sphere>(100));
-
-    vector<GeometricPrimitive> scene;
     scene.push_back(a);
     scene.push_back(b);
-
-    fstream file("./image.pfm", ios::out | ios::binary);
-    file << "PF\n" << width << " " << height << "\n" << "-1\n";
-
-    Vector3 lowerLeftCorner(-2, -1, 0);
-    Vector3 horizotal(4, 0, 0);
-    Vector3 vertical(0, 2, 0);
 
     random_device dev;
     mt19937 gen(dev());
     std::uniform_real_distribution<Float> d(0, 1);
 
-    Vector3 c(0, 0, 0);
-    for (auto y = height - 1; y >= 0; --y)
-        for (auto x = 0; x < width; ++x) {
-            for (auto s = 0; s < samples; ++s) {
-                auto u = (x + d(gen)) / (Float)width;
-                auto v = 1 - (y + d(gen)) / (Float)height;
-                Vector3 eye(0, 0, -1);
-                auto target = lowerLeftCorner + horizotal * u + vertical * v;
-                c += color(scene, Ray(eye, normalize(target - eye)));
-            }
-            c /= samples;
-            file.write((char*)&c, sizeof(Vector3));
-        }
+    Film film(
+        Vector2i(width, height),
+        Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
+    );
 
-	file.close();
+    PerspectiveCamera camera(
+        Frame::translate(0, 0, -1), film,
+        Bounds2f(Vector2f(-2, -1), Vector2f(2, 1)),
+        0, 0, 90
+    );
+
+    for (auto p : film.pixelBounds) {
+        Vector3 c(0, 0, 0);
+        for (auto s = 0; s < samples; ++s) {
+            CameraSample sample;
+            sample.pFilm = Vector2f(p.x, p.y) + Vector2f(d(gen), d(gen));
+            auto ray = camera.generateRay(sample);
+            c += color(scene, ray);
+        }
+        film.pixels.emplace_back(c / samples);
+    }
+
+    film.writeImage("./image.pfm");
 
     return 0;
 }

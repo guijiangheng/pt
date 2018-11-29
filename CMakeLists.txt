@@ -5,13 +5,20 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(PT_CORE_HEADERS
     include/pt/pt.h
+    
     include/pt/core/ray.h
+    include/pt/core/frame.h
     include/pt/core/interaction.h
+    include/pt/core/film.h
+    include/pt/core/camera.h
     include/pt/core/shape.h
+
     include/pt/math/math.h
+    include/pt/math/vector2.h
     include/pt/math/vector3.h
     include/pt/math/matrix4.h
-    include/pt/math/frame.h
+    include/pt/math/bounds2.h
+    
 )
 
 set(PT_CORE_SRCS

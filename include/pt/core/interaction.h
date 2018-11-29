@@ -9,11 +9,9 @@ class Interaction {
 public:
     Interaction() = default;
 
-
     Interaction(const Vector3& p, const Vector3& n, const Vector3& wo)
         : p(p), n(n), wo(wo)
     { }
-
 
 public:
     Vector3 p;

@@ -2,7 +2,7 @@
 #define PT_CORE_PRIMITIVE_H
 
 #include <memory>
-#include <pt/math/frame.h>
+#include <pt/core/frame.h>
 
 #include "ray.h"
 #include "shape.h"

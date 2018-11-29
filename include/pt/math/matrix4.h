@@ -42,25 +42,25 @@ public:
 
     Vector3 applyV(const Vector3& v) const {
         return Vector3(
-            e[0][0] * v.x() + e[0][1] * v.y() + e[0][2] * v.z(),
-            e[1][0] * v.x() + e[1][1] * v.y() + e[1][2] * v.z(),
-            e[2][0] * v.x() + e[2][1] * v.y() + e[2][2] * v.z()
+            e[0][0] * v.x + e[0][1] * v.y + e[0][2] * v.z,
+            e[1][0] * v.x + e[1][1] * v.y + e[1][2] * v.z,
+            e[2][0] * v.x + e[2][1] * v.y + e[2][2] * v.z
         );
     }
 
     Vector3 applyN(const Vector3& n) const {
         return Vector3(
-            e[0][0] * n.x() + e[1][0] * n.y() + e[2][0] * n.z(),
-            e[0][1] * n.x() + e[1][1] * n.y() + e[2][1] * n.z(),
-            e[0][2] * n.x() + e[1][2] * n.y() + e[2][2] * n.z()
+            e[0][0] * n.x + e[1][0] * n.y + e[2][0] * n.z,
+            e[0][1] * n.x + e[1][1] * n.y + e[2][1] * n.z,
+            e[0][2] * n.x + e[1][2] * n.y + e[2][2] * n.z
         );
     }
 
     Vector3 applyP(const Vector3& p) const {
-        auto x = e[0][0] * p.x() + e[0][1] * p.y() + e[0][2] * p.z() + e[0][3];
-        auto y = e[1][0] * p.x() + e[1][1] * p.y() + e[1][2] * p.z() + e[1][3];
-        auto z = e[2][0] * p.x() + e[2][1] * p.y() + e[2][2] * p.z() + e[2][3];
-        auto w = e[3][0] * p.x() + e[3][1] * p.y() + e[3][2] * p.z() + e[3][3];
+        auto x = e[0][0] * p.x + e[0][1] * p.y + e[0][2] * p.z + e[0][3];
+        auto y = e[1][0] * p.x + e[1][1] * p.y + e[1][2] * p.z + e[1][3];
+        auto z = e[2][0] * p.x + e[2][1] * p.y + e[2][2] * p.z + e[2][3];
+        auto w = e[3][0] * p.x + e[3][1] * p.y + e[3][2] * p.z + e[3][3];
         if (w == 1)
             return Vector3(x, y, z);
         return Vector3(x, y, z) / w;
@@ -151,7 +151,7 @@ public:
     static Matrix4 rotate(const Vector3& axis, Float angle) {
         auto s = std::sin(radians(angle));
         auto c = std::cos(radians(angle));
-        auto x = axis.x(), y = axis.y(), z = axis.z();
+        auto x = axis.x, y = axis.y, z = axis.z;
         auto xx = x * x, xy = x * y, xz = x * z, yy = y * y, yz = y * z, zz = z * z;
         return Matrix4(
             xx + (1 - xx) * c, xy * (1 - c) - z * s, xz * (1 - c) + y * s, 0,
@@ -166,10 +166,20 @@ public:
         auto x = normalize(cross(up, z));
         auto y = cross(z, x);
         return Matrix4(
-            x.x(), y.x(), z.x(), pos.x(),
-            x.y(), y.y(), z.y(), pos.y(),
-            x.z(), y.z(), z.z(), pos.z(),
+            x.x, y.x, z.x, pos.x,
+            x.y, y.y, z.y, pos.y,
+            x.z, y.z, z.z, pos.z,
             0, 0, 0, 1
+        );
+    }
+
+    static Matrix4 perspective(Float fov, Float near, Float far) {
+        Float d = 1 / std::tan(radians(fov / 2));
+        return Matrix4(
+            d, 0, 0, 0,
+            0, d, 0, 0,
+            0, 0, far / (far - near), near * far / (near - far),
+            0, 0, 1, 0
         );
     }
 

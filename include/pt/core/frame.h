@@ -1,8 +1,8 @@
-#ifndef PT_MATH_FRAME_H
-#define PT_MATH_FRAME_H
+#ifndef PT_CORE_FRAME_H
+#define PT_CORE_FRAME_H
 
+#include <pt/math/matrix4.h>
 #include <pt/core/interaction.h>
-#include "matrix4.h"
 
 namespace pt {
 
