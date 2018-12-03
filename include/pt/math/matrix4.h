@@ -130,10 +130,10 @@ public:
         auto s = std::sin(radians(angle));
         auto c = std::cos(radians(angle));
         return Matrix4(
-            c, 0, s, 0,
-            0, 1, 0, 0,
+             c, 0, s, 0,
+             0, 1, 0, 0,
             -s, 0, c, 0,
-            0, 0, 0, 1 
+             0, 0, 0, 1 
         );
     }
 

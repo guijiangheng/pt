@@ -12,6 +12,10 @@ set(PT_CORE_HEADERS
     include/pt/core/film.h
     include/pt/core/camera.h
     include/pt/core/shape.h
+    include/pt/core/sampler.h
+    include/pt/core/scene.h
+    include/pt/core/camera.h
+    include/pt/core/scene.h
 
     include/pt/math/math.h
     include/pt/math/vector2.h

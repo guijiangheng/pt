@@ -1,5 +1,5 @@
-#ifndef PT_CAMERA_PERSPECTIVE_H
-#define PT_CAMERA_PERSPECTIVE_H
+#ifndef PT_CAMERAS_PERSPECTIVE_H
+#define PT_CAMERAS_PERSPECTIVE_H
 
 #include <pt/core/camera.h>
 

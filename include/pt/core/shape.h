@@ -1,8 +1,8 @@
 #ifndef PT_CORE_SHAPE_H
 #define PT_CORE_SHAPE_H
 
-#include "ray.h"
-#include "interaction.h"
+#include <pt/core/ray.h>
+#include <pt/core/interaction.h>
 
 namespace pt {
 

@@ -2,19 +2,18 @@
 #define PT_CORE_PRIMITIVE_H
 
 #include <memory>
+#include <pt/core/ray.h>
 #include <pt/core/frame.h>
-
-#include "ray.h"
-#include "shape.h"
-#include "interaction.h"
+#include <pt/core/shape.h>
+#include <pt/core/interaction.h>
 
 namespace pt {
 
 class Primitive {
 public:
     virtual ~Primitive() = default;
-    virtual bool intersect(const Ray& r, Interaction& isect) const = 0;
-    virtual bool intersect(const Ray& r) const = 0;
+    virtual bool intersect(const Ray& ray, Interaction& isect) const = 0;
+    virtual bool intersect(const Ray& ray) const = 0;
 };
 
 class GeometricPrimitive : public Primitive {
@@ -24,17 +23,17 @@ public:
         : frame(frame), shape(shape)
     { }
 
-    bool intersect(const Ray& r, Interaction& isect) const override {
+    bool intersect(const Ray& ray, Interaction& isect) const override {
         Float tHit;
-        auto newRay = frame.toLocal(r);
+        auto newRay = frame.toLocal(ray);
         if (!shape->intersect(newRay, tHit, isect)) return false;
-        r.tMax = tHit;
+        ray.tMax = tHit;
         isect = frame.toGlobal(isect);
         return true;
     }
 
-    bool intersect(const Ray& r) const override {
-        return shape->intersect(frame.toLocal(r));
+    bool intersect(const Ray& ray) const override {
+        return shape->intersect(frame.toLocal(ray));
     }
 
 private:

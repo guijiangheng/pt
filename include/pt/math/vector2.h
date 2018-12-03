@@ -13,6 +13,12 @@ public:
     Vector2(T x, T y) : x(x), y(y)
     { }
 
+    template <typename U>
+    explicit Vector2(const Vector2<U>& rhs)
+        : x((T)rhs.x)
+        , y((T)rhs.y)
+    { }
+
     Vector2 operator+(const Vector2& v) const {
         return Vector2(x + v.x, y + v.y);
     }
