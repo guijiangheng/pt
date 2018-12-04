@@ -8,20 +8,19 @@ namespace pt {
 
 class Scene {
 public:
-    Scene(std::unique_ptr<Primitive>&& aggregate)
-        : aggregate(std::move(aggregate))
+    Scene(const Primitive& aggregate) : aggregate(aggregate)
     { }
 
     bool intersect(const Ray& ray, Interaction& isect) const {
-        return aggregate->intersect(ray, isect);
+        return aggregate.intersect(ray, isect);
     }
 
     bool intersect(const Ray& ray) const {
-        return aggregate->intersect(ray);
+        return aggregate.intersect(ray);
     }
 
 private:
-    std::unique_ptr<Primitive> aggregate;
+    const Primitive& aggregate;
 };
 
 }

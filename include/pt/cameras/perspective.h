@@ -19,7 +19,7 @@ public:
     Ray generateRay(const CameraSample& sample) const override {
         Vector3 pFilm(sample.pFilm.x, sample.pFilm.y, 0);
         auto pCamera = rasterToCamera.applyP(pFilm);
-        Ray ray(Vector3(0, 0, 0), normalize(pCamera));
+        Ray ray(Vector3(0), normalize(pCamera));
         return frame.toGlobal(ray);
     }
 };

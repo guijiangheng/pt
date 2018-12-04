@@ -10,6 +10,9 @@ class Vector2 {
 public:
     Vector2() = default;
 
+    explicit Vector2(T x) : x(x), y(x)
+    { }
+
     Vector2(T x, T y) : x(x), y(y)
     { }
 

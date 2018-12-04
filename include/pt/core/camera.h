@@ -22,7 +22,7 @@ public:
 
     virtual Ray generateRay(const CameraSample& sample) const = 0;
 
-protected:
+public:
     Frame frame;
     Film& film;
 };

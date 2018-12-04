@@ -19,7 +19,7 @@ public:
     
     virtual Vector2f get2D() = 0;
 
-    void startPixel(const Vector2i& p) {
+    void startPixel() {
         currentPixelSampleIndex = 0;
     }
 

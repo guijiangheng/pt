@@ -3,12 +3,12 @@
 #include <fstream>
 #include <iostream>
 
-#include <pt/core/film.h>
 #include <pt/samplers/random.h>
 #include <pt/shapes/sphere.h>
 #include <pt/cameras/perspective.h>
 #include <pt/accelerators/bvh.h>
 #include <pt/core/scene.h>
+#include <pt/core/integrator.h>
 
 using namespace pt;
 using namespace std;
@@ -26,28 +26,33 @@ Vector3 randomUnitSphere() {
     return p;
 }
 
-Vector3 color(const Scene& scene, const Ray& ray) {
-    Interaction isect;
-    if (scene.intersect(ray, isect)) {
-        Vector3 o = isect.p + isect.n * EPSILON;
-        Vector3 target = isect.p + isect.n + randomUnitSphere();
-        return color(scene, Ray(o, normalize(target - o))) * 0.5;
+class SimpleIntegrator : public SamplerIntegrator {
+public:
+    SimpleIntegrator(Camera& camera, Sampler& sampler)
+        : SamplerIntegrator(camera, sampler)
+    { }
+
+    Vector3 Li(const Ray& ray, const Scene& scene) const override {
+        Interaction isect;
+        if (scene.intersect(ray, isect)) {
+            Vector3 o = isect.p + isect.n * EPSILON;
+            Vector3 target = isect.p + isect.n + randomUnitSphere();
+            return Li(Ray(o, normalize(target - o)), scene) * 0.5;
+        }
+        auto t = (ray.d.y + 1) / 2;
+        return lerp(Vector3(1, 1, 1), Vector3(0.5, 0.7, 1.0), t);
     }
-    auto t = (ray.d.y + 1) / 2;
-    return lerp(Vector3(1, 1, 1), Vector3(0.5, 0.7, 1.0), t);
-}
+};
 
 int main() {
-    constexpr auto width = 400;
-    constexpr auto height = 200;
-
-    vector<unique_ptr<Primitive>> primitives;
-    primitives.emplace_back(make_unique<GeometricPrimitive>(Frame(), make_shared<Sphere>(0.5)));
-    primitives.emplace_back(make_unique<GeometricPrimitive>(Frame::translate(0, -100.5, 0), make_shared<Sphere>(100)));
-    Scene scene(std::make_unique<BVHAccel>(move(primitives)));
+    vector<Primitive*> primitives;
+    primitives.push_back(new GeometricPrimitive(Frame(), make_shared<Sphere>(0.5)));
+    primitives.push_back(new GeometricPrimitive(Frame::translate(0, -100.5, 0), make_shared<Sphere>(100)));
+    BVHAccel accel(std::move(primitives));
+    Scene scene(accel);
 
     Film film(
-        Vector2i(width, height),
+        Vector2i(400, 200),
         Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
     );
 
@@ -57,17 +62,8 @@ int main() {
         0, 0, 90
     );
 
-    for (auto p : film.pixelBounds) {
-        Vector3 c(0, 0, 0);
-        sampler.startPixel(p);
-        do {
-            auto cameraSample = sampler.getCameraSample(p);
-            auto ray = camera.generateRay(cameraSample);
-            c += color(scene, ray);
-        } while (sampler.startNextSample());
-        film.pixels.emplace_back(c / sampler.samplesPerPixel);
-    }
-
+    SimpleIntegrator integrator(camera, sampler);
+    integrator.render(scene);
     film.writeImage("./image.pfm");
 
     return 0;
