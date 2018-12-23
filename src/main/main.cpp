@@ -46,8 +46,8 @@ public:
 
 int main() {
     vector<Primitive*> primitives;
-    primitives.push_back(new GeometricPrimitive(Frame(), make_shared<Sphere>(0.5)));
-    primitives.push_back(new GeometricPrimitive(Frame::translate(0, -100.5, 0), make_shared<Sphere>(100)));
+    primitives.push_back(new ShapePrimitive(make_shared<Sphere>(0.5)));
+    primitives.push_back(new ShapePrimitive(Frame::translate(0, -100.5, 0), make_shared<Sphere>(100)));
     BVHAccel accel(std::move(primitives));
     Scene scene(accel);
 

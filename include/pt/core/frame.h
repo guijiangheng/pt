@@ -21,7 +21,7 @@ public:
         return mInv.applyV(v);
     }
 
-    Vector3 toGlobalV(const Vector3& v) const {
+    Vector3 toWorldV(const Vector3& v) const {
         return m.applyV(v);
     }
 
@@ -29,7 +29,7 @@ public:
         return mInv.applyN(n);
     }
 
-    Vector3 toGlobalN(const Vector3& n) const {
+    Vector3 toWorldN(const Vector3& n) const {
         return m.applyN(n);
     }
 
@@ -37,7 +37,7 @@ public:
         return mInv.applyP(p);
     }
 
-    Vector3 toGlobalP(const Vector3& p) const {
+    Vector3 toWorldP(const Vector3& p) const {
         return m.applyP(p);
     }
 
@@ -45,8 +45,8 @@ public:
         return Ray(toLocalP(r.o), toLocalV(r.d), r.tMax);
     }
 
-    Ray toGlobal(const Ray& r) const {
-        return Ray(toGlobalP(r.o), toGlobalV(r.d), r.tMax);
+    Ray toWorld(const Ray& r) const {
+        return Ray(toWorldP(r.o), toWorldV(r.d), r.tMax);
     }
 
     Interaction toLocal(const Interaction& isect) const {
@@ -57,11 +57,11 @@ public:
         );
     }
 
-    Interaction toGlobal(const Interaction& isect) const {
+    Interaction toWorld(const Interaction& isect) const {
         return Interaction(
-            toGlobalP(isect.p),
-            toGlobalN(isect.n),
-            toGlobalV(isect.wo)
+            toWorldP(isect.p),
+            toWorldN(isect.n),
+            toWorldV(isect.wo)
         );
     }
 

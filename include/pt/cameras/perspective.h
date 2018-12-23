@@ -20,7 +20,7 @@ public:
         Vector3 pFilm(sample.pFilm.x, sample.pFilm.y, 0);
         auto pCamera = rasterToCamera.applyP(pFilm);
         Ray ray(Vector3(0), normalize(pCamera));
-        return frame.toGlobal(ray);
+        return frame.toWorld(ray);
     }
 };
 
