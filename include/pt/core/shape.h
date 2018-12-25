@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <pt/core/ray.h>
+#include <pt/core/frame.h>
 #include <pt/core/interaction.h>
 
 namespace pt {

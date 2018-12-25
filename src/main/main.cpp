@@ -3,12 +3,13 @@
 #include <fstream>
 #include <iostream>
 
-#include <pt/samplers/random.h>
-#include <pt/shapes/sphere.h>
-#include <pt/cameras/perspective.h>
-#include <pt/accelerators/bvh.h>
 #include <pt/core/scene.h>
 #include <pt/core/integrator.h>
+#include <pt/samplers/random.h>
+#include <pt/cameras/perspective.h>
+#include <pt/accelerators/bvh.h>
+#include <pt/shapes/sphere.h>
+#include <pt/shapes/triangle.h>
 
 using namespace pt;
 using namespace std;
@@ -47,12 +48,19 @@ public:
 int main() {
     vector<Primitive*> primitives;
     primitives.push_back(new ShapePrimitive(make_shared<Sphere>(0.5)));
-    primitives.push_back(new ShapePrimitive(Frame::translate(0, -100.5, 0), make_shared<Sphere>(100)));
+
+    Vector3 a(-100, -0.5, -100);
+    Vector3 b( 100, -0.5, -100);
+    Vector3 c( 100, -0.5,  100);
+    Vector3 d(-100, -0.5,  100);
+    primitives.push_back(new ShapePrimitive(make_shared<Triangle>(b, a, c)));
+    primitives.push_back(new ShapePrimitive(make_shared<Triangle>(d, c, a)));
+
     BVHAccel accel(std::move(primitives));
     Scene scene(accel);
 
     Film film(
-        Vector2i(400, 200),
+        Vector2i(800, 400),
         Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
     );
 

@@ -3,6 +3,9 @@ project(pt CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+
 set(PT_CORE_HEADERS
     include/pt/pt.h
     
@@ -23,7 +26,6 @@ set(PT_CORE_HEADERS
     include/pt/math/vector3.h
     include/pt/math/matrix4.h
     include/pt/math/bounds2.h
-    
 )
 
 set(PT_CORE_SRCS
