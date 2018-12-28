@@ -1,6 +1,7 @@
 #ifndef PT_SHAPES_TRIANGLE_H
 #define PT_SHAPES_TRIANGLE_H
 
+#include <vector>
 #include <pt/core/shape.h>
 
 namespace pt {
@@ -76,7 +77,7 @@ public:
 
         tHit = dist;
         isect.p = a + edge1 * u + edge2 * v;
-        isect.n = cross(edge2, edge1);
+        isect.n = normalize(cross(edge2, edge1));
         isect.wo = -ray.d;
 
         return true;

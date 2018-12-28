@@ -10,6 +10,7 @@
 #include <pt/accelerators/bvh.h>
 #include <pt/shapes/sphere.h>
 #include <pt/shapes/triangle.h>
+#include <pt/utils/objloader.h>
 
 using namespace pt;
 using namespace std;
@@ -27,40 +28,26 @@ Vector3 randomUnitSphere() {
     return p;
 }
 
-class SimpleIntegrator : public SamplerIntegrator {
+class NormalIntegrator : public SamplerIntegrator {
 public:
-    SimpleIntegrator(Camera& camera, Sampler& sampler)
+    NormalIntegrator(Camera& camera, Sampler& sampler)
         : SamplerIntegrator(camera, sampler)
     { }
 
     Vector3 Li(const Ray& ray, const Scene& scene) const override {
         Interaction isect;
         if (scene.intersect(ray, isect)) {
-            Vector3 o = isect.p + isect.n * EPSILON;
-            Vector3 target = isect.p + isect.n + randomUnitSphere();
-            return Li(Ray(o, normalize(target - o)), scene) * 0.5;
+            return abs(isect.n);
         }
-        auto t = (ray.d.y + 1) / 2;
-        return lerp(Vector3(1, 1, 1), Vector3(0.5, 0.7, 1.0), t);
+        return Vector3(0);
     }
 };
 
 int main() {
-    vector<Primitive*> primitives;
-    primitives.push_back(new ShapePrimitive(make_shared<Sphere>(0.5)));
+    auto bunny = loadObjMesh("../assets/bunny.obj");
+    auto triangles = createTriangleMesh(bunny);
+    std::vector<Primitive*> primitives;
 
-    std::vector<Vector3> vertices = {
-        Vector3(-100, 0, -100),
-        Vector3( 100, 0, -100),
-        Vector3( 100, 0,  100),
-        Vector3(-100, 0,  100)
-    };
-    std::vector<int> indices = { 1, 0, 2, 3, 2, 0 };
-
-    Mesh mesh(std::move(indices), std::move(vertices));
-    Mesh transformedMesh(Frame::translate(0, -0.5, 0), mesh);
-
-    auto triangles = createTriangleMesh(transformedMesh);
     for (auto& triangle : triangles) {
         primitives.push_back(new ShapePrimitive(triangle));
     }
@@ -69,17 +56,23 @@ int main() {
     Scene scene(accel);
 
     Film film(
-        Vector2i(800, 400),
+        Vector2i(768, 768),
         Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
     );
 
     PerspectiveCamera camera(
-        Frame::translate(0, 0, -1), film,
-        Bounds2f(Vector2f(-2, -1), Vector2f(2, 1)),
-        0, 0, 90
+        Frame::lookAt(
+            Vector3(-0.0315182, 0.284011, 0.7331),
+            Vector3(-0.0123771, 0.0540913, -0.239922),
+            Vector3(0.00717446, 0.973206, -0.229822)
+        ),
+        film,
+        Bounds2f(Vector2f(-1, -1), Vector2f(1, 1)),
+        0, 0, 30
     );
 
-    SimpleIntegrator integrator(camera, sampler);
+    RandonSampler sampler(1);
+    NormalIntegrator integrator(camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");
 
