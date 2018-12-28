@@ -49,12 +49,21 @@ int main() {
     vector<Primitive*> primitives;
     primitives.push_back(new ShapePrimitive(make_shared<Sphere>(0.5)));
 
-    Vector3 a(-100, -0.5, -100);
-    Vector3 b( 100, -0.5, -100);
-    Vector3 c( 100, -0.5,  100);
-    Vector3 d(-100, -0.5,  100);
-    primitives.push_back(new ShapePrimitive(make_shared<Triangle>(b, a, c)));
-    primitives.push_back(new ShapePrimitive(make_shared<Triangle>(d, c, a)));
+    std::vector<Vector3> vertices = {
+        Vector3(-100, 0, -100),
+        Vector3( 100, 0, -100),
+        Vector3( 100, 0,  100),
+        Vector3(-100, 0,  100)
+    };
+    std::vector<int> indices = { 1, 0, 2, 3, 2, 0 };
+
+    Mesh mesh(std::move(indices), std::move(vertices));
+    Mesh transformedMesh(Frame::translate(0, -0.5, 0), mesh);
+
+    auto triangles = createTriangleMesh(transformedMesh);
+    for (auto& triangle : triangles) {
+        primitives.push_back(new ShapePrimitive(triangle));
+    }
 
     BVHAccel accel(std::move(primitives));
     Scene scene(accel);
