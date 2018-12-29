@@ -17,17 +17,6 @@ using namespace std;
 
 constexpr auto EPSILON = (Float)0.00001;
 
-RandonSampler sampler(100);
-
-Vector3 randomUnitSphere() {
-    Vector3 p;
-    do {
-        p = Vector3(sampler.get1D(), sampler.get1D(), sampler.get1D());
-        p = p * 2 - Vector3(1, 1, 1);
-    } while (p.lengthSquared() > 1);
-    return p;
-}
-
 class NormalIntegrator : public SamplerIntegrator {
 public:
     NormalIntegrator(Camera& camera, Sampler& sampler)
@@ -36,9 +25,8 @@ public:
 
     Vector3 Li(const Ray& ray, const Scene& scene) const override {
         Interaction isect;
-        if (scene.intersect(ray, isect)) {
+        if (scene.intersect(ray, isect))
             return abs(isect.n);
-        }
         return Vector3(0);
     }
 };
@@ -56,19 +44,19 @@ int main() {
     Scene scene(accel);
 
     Film film(
-        Vector2i(768, 768),
+        Vector2i(512, 512),
         Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
     );
 
     PerspectiveCamera camera(
         Frame::lookAt(
-            Vector3(-0.0315182, 0.284011, 0.7331),
-            Vector3(-0.0123771, 0.0540913, -0.239922),
-            Vector3(0.00717446, 0.973206, -0.229822)
+            Vector3(-0.0315182, 0.284011, -0.7331),
+            Vector3(-0.0123771, 0.0540913, 0.239922),
+            Vector3(0.00717446, 0.973206, 0.229822)
         ),
         film,
         Bounds2f(Vector2f(-1, -1), Vector2f(1, 1)),
-        0, 0, 30
+        0, 0, 16
     );
 
     RandonSampler sampler(1);

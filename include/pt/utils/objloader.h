@@ -27,7 +27,7 @@ std::vector<std::string> tokenize(const std::string& string, const std::string& 
 
 class ObjVertex {
 public:
-    ObjVertex(): p(0), n(0), uv(0)
+    ObjVertex() : p(0), n(0), uv(0)
     { }
 
     ObjVertex(const std::string& string) {
@@ -79,19 +79,18 @@ Mesh loadObjMesh(const std::string& filename) {
         return hash;
     };
 
-    std::unordered_map<ObjVertex, int, decltype(hash)> map(200, hash);
-
     std::string lineStr;
+    std::unordered_map<ObjVertex, int, decltype(hash)> map(200, hash);
 
     while (std::getline(stream, lineStr)) {
         std::istringstream line(lineStr);
-
         std::string prefix;
         line >> prefix;
 
         if (prefix == "v") {
             Vector3 p;
             line >> p.x >> p.y >> p.z;
+            p.z = -p.z;
             positions.push_back(p);
         } else if (prefix == "vt") {
             Vector2f uv;
@@ -135,14 +134,14 @@ Mesh loadObjMesh(const std::string& filename) {
     std::vector<Vector3> meshVertices;
     meshVertices.reserve(vertices.size());
     for (auto& v : vertices) {
-        meshVertices.push_back(positions[v.p]);
+        meshVertices.push_back(positions[v.p - 1]);
     }
 
     std::vector<Vector3> meshNormals;
     if (!normals.empty()) {
         meshNormals.reserve(vertices.size());
         for (auto& v : vertices) {
-            meshNormals.push_back(normals[v.n]);
+            meshNormals.push_back(normals[v.n - 1]);
         }
     }
 
@@ -150,9 +149,12 @@ Mesh loadObjMesh(const std::string& filename) {
     if (!uvs.empty()) {
         meshUvs.reserve(vertices.size());
         for (auto& v : vertices) {
-            meshUvs.push_back(uvs[v.uv]);
+            meshUvs.push_back(uvs[v.uv - 1]);
         }
     }
+
+    std::cout << "Done. V=" << meshVertices.size()
+              << ", F=" << indices.size() / 3 << std::endl;
 
     return Mesh(
         std::move(indices),

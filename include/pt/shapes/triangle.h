@@ -60,7 +60,7 @@ public:
         auto p = cross(ray.d, edge2);
         auto det = dot(p, edge1);
 
-        if (det < Float(0.0001) && det > -Float(0.0001))
+        if (det < Float(0.000001) && det > -Float(0.000001))
             return false;
         
         auto t = ray.o - a;
