@@ -10,7 +10,7 @@ class Matrix4 {
 public:
     Matrix4() = default;
 
-    Matrix4(const Float m[4][4]) {
+    Matrix4(const Float m[4][4]) noexcept {
         std::memcpy(e, m, 16 * sizeof(Float));
     }
 
@@ -19,7 +19,7 @@ public:
         float m10, float m11, float m12, float m13,
         float m20, float m21, float m22, float m23,
         float m30, float m31, float m32, float m33
-    ) : e {
+    ) noexcept : e {
         m00, m01, m02, m03,
         m10, m11, m12, m13,
         m20, m21, m22, m23,

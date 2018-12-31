@@ -6,3 +6,5 @@ loadScene() {
     meshs.push(mesh());
 }
 ```
+
+SAH找不到最好的划分就用穷举法，穷举法找不到就直接构造叶子节点。

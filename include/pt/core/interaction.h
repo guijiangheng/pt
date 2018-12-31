@@ -9,7 +9,7 @@ class Interaction {
 public:
     Interaction() = default;
 
-    Interaction(const Vector3& p, const Vector3& n, const Vector3& wo)
+    Interaction(const Vector3& p, const Vector3& n, const Vector3& wo) noexcept
         : p(p), n(n), wo(wo)
     { }
 

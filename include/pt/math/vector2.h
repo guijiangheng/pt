@@ -10,14 +10,14 @@ class Vector2 {
 public:
     Vector2() = default;
 
-    explicit Vector2(T x) : x(x), y(x)
+    explicit Vector2(T x) noexcept : x(x), y(x)
     { }
 
-    Vector2(T x, T y) : x(x), y(y)
+    Vector2(T x, T y) noexcept : x(x), y(y)
     { }
 
     template <typename U>
-    explicit Vector2(const Vector2<U>& rhs)
+    explicit Vector2(const Vector2<U>& rhs) noexcept
         : x((T)rhs.x)
         , y((T)rhs.y)
     { }

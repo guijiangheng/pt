@@ -49,6 +49,13 @@ public:
         : mesh(mesh), indices(&mesh.indices[3 * triangleIndex])
     { }
 
+    Bounds3 getBounds() const override {
+        auto& a = mesh.vertices[indices[0]];
+        auto& b = mesh.vertices[indices[1]];
+        auto& c = mesh.vertices[indices[2]];
+        return merge(Bounds3(a, b), c);
+    }
+
     // ref https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf
     bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const override {
         auto& a = mesh.vertices[indices[0]];

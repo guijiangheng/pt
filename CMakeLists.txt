@@ -26,10 +26,12 @@ set(PT_CORE_HEADERS
     include/pt/math/vector3.h
     include/pt/math/matrix4.h
     include/pt/math/bounds2.h
+    include/pt/math/bounds3.h
 )
 
 set(PT_CORE_SRCS
     src/math/matrix4.cpp
+    src/accelerators/bvh.cpp
 )
 
 include_directories(include)
@@ -41,3 +43,6 @@ add_library(pt STATIC
 
 add_executable(main src/main/main.cpp)
 target_link_libraries(main pt)
+
+add_executable(twosphere src/main/twosphere.cpp)
+target_link_libraries(twosphere pt)

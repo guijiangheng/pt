@@ -8,18 +8,23 @@ namespace pt {
 class Primitive {
 public:
     virtual ~Primitive() = default;
+    virtual Bounds3 getBounds() const = 0;
     virtual bool intersect(const Ray& ray, Interaction& isect) const = 0;
     virtual bool intersect(const Ray& ray) const = 0;
 };
 
 class ShapePrimitive : public Primitive {
 public:
-    ShapePrimitive(const std::shared_ptr<Shape>& shape) : shape(shape)
+    ShapePrimitive(const std::shared_ptr<Shape>& shape) noexcept : shape(shape)
     { }
 
-    ShapePrimitive(const Frame& frame, const std::shared_ptr<Shape>& shape)
+    ShapePrimitive(const Frame& frame, const std::shared_ptr<Shape>& shape) noexcept
         : shape(std::make_shared<TransformedShape>(frame, shape))
     { }
+
+    Bounds3 getBounds() const override {
+        return shape->getBounds();
+    }
 
     bool intersect(const Ray& ray, Interaction& isect) const override {
         Float tHit;

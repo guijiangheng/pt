@@ -3,11 +3,9 @@
 #include <pt/samplers/random.h>
 #include <pt/cameras/perspective.h>
 #include <pt/accelerators/bvh.h>
-#include <pt/shapes/triangle.h>
-#include <pt/utils/objloader.h>
+#include <pt/shapes/sphere.h>
 
 using namespace pt;
-using namespace std;
 
 class NormalIntegrator : public SamplerIntegrator {
 public:
@@ -24,15 +22,12 @@ public:
 };
 
 int main() {
-    auto bunny = loadObjMesh("../assets/bunny.obj");
-    auto triangles = createTriangleMesh(bunny);
-    std::vector<Primitive*> primitives;
+    std::vector<Primitive*> prims;
+    auto sphere = std::make_shared<Sphere>(1);
+    prims.push_back(new ShapePrimitive(Frame::translate(-1, 0, 0), sphere));
+    prims.push_back(new ShapePrimitive(Frame::translate( 1, 0, 0), sphere));
 
-    for (auto& triangle : triangles) {
-        primitives.push_back(new ShapePrimitive(triangle));
-    }
-
-    BVHAccel accel(std::move(primitives));
+    BVHAccel accel(std::move(prims));
     Scene scene(accel);
 
     Film film(
@@ -42,11 +37,10 @@ int main() {
 
     PerspectiveCamera camera(
         Frame::lookAt(
-            Vector3(-0.0315182, 0.284011, -0.7331),
-            Vector3(-0.0123771, 0.0540913, 0.239922),
-            Vector3(0.00717446, 0.973206, 0.229822)
-        ),
-        film,
+            Vector3(0, 0, -30),
+            Vector3(0),
+            Vector3(0, 1, 0)
+        ), film,
         Bounds2f(Vector2f(-1, -1), Vector2f(1, 1)),
         0, 0, 16
     );

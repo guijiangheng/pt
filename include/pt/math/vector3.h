@@ -11,14 +11,14 @@ class Vector3 {
 public:
     Vector3() = default;
 
-    explicit Vector3(Float x) : x(x), y(x), z(x)
+    explicit Vector3(Float x) noexcept : x(x), y(x), z(x)
     { }
 
-    Vector3(Float x, Float y, Float z) : x(x), y(y), z(z)
+    Vector3(Float x, Float y, Float z) noexcept : x(x), y(y), z(z)
     { }
 
     template <typename T>
-    explicit Vector3(const Vector2<T>& v) : x((Float)v.x), y((Float)v.y), z(0)
+    explicit Vector3(const Vector2<T>& v) noexcept : x((Float)v.x), y((Float)v.y), z(0)
     { }
 
     Float& operator[](int index) {

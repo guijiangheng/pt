@@ -10,6 +10,10 @@ public:
     Sphere(Float radius = 1) : radius(radius)
     { }
 
+    Bounds3 getBounds() const override {
+        return Bounds3(Vector3(-radius), Vector3(radius));
+    }
+
     bool intersect(const Ray& r, Float& tHit, Interaction& isect) const override {
         auto a = r.d.lengthSquared();
         auto b = 2 * (r.d.x * r.o.x + r.d.y * r.o.y + r.d.z * r.o.z);

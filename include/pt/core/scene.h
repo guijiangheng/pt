@@ -8,7 +8,7 @@ namespace pt {
 
 class Scene {
 public:
-    Scene(const Primitive& aggregate) : aggregate(aggregate)
+    Scene(const Primitive& aggregate) noexcept : aggregate(aggregate)
     { }
 
     bool intersect(const Ray& ray, Interaction& isect) const {

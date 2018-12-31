@@ -8,13 +8,13 @@ namespace pt {
 
 class Frame {
 public:
-    Frame() : m(Matrix4::identity()), mInv(Matrix4::identity())
+    Frame() noexcept : m(Matrix4::identity()), mInv(Matrix4::identity())
     { }
 
-    Frame(const Matrix4& m) : m(m), mInv(inverse(m))
+    Frame(const Matrix4& m) noexcept : m(m), mInv(inverse(m))
     { }
 
-    Frame (const Matrix4& m, const Matrix4& mInv) : m(m), mInv(mInv)
+    Frame (const Matrix4& m, const Matrix4& mInv) noexcept : m(m), mInv(mInv)
     { }
 
     Vector3 toLocalV(const Vector3& v) const {
@@ -47,6 +47,18 @@ public:
 
     Ray toWorld(const Ray& r) const {
         return Ray(toWorldP(r.o), toWorldV(r.d), r.tMax);
+    }
+
+    Bounds3 toWorld(const Bounds3& b) const {
+        Bounds3 ret(toWorldP(b.pMin));
+        ret.expandBy(toWorldP(Vector3(b.pMin.x, b.pMin.y, b.pMax.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMin.x, b.pMax.y, b.pMin.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMin.x, b.pMax.y, b.pMax.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMax.x, b.pMin.y, b.pMin.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMax.x, b.pMin.y, b.pMax.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMax.x, b.pMax.y, b.pMin.z)));
+        ret.expandBy(toWorldP(Vector3(b.pMax.x, b.pMax.y, b.pMax.z)));
+        return ret;
     }
 
     Interaction toLocal(const Interaction& isect) const {

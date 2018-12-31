@@ -14,7 +14,7 @@ struct CameraSample {
 
 class Camera {
 public:
-    Camera(const Frame& frame, Film& film)
+    Camera(const Frame& frame, Film& film) noexcept
         : frame(frame), film(film)
     { }
 
@@ -32,7 +32,7 @@ public:
     ProjectiveCamera(const Frame& frame, Film& film,
                      const Matrix4& cameraToScreen,
                      const Bounds2f& screenWindow,
-                     Float lensRadius, Float focalDistance)
+                     Float lensRadius, Float focalDistance) noexcept
         : Camera(frame, film)
         , lensRadius(lensRadius), focalDistance(focalDistance) {
         

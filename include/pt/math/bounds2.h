@@ -10,12 +10,10 @@ namespace pt {
 template <typename T>
 class Bounds2 {
 public:
-    Bounds2() {
-        auto minVal = std::numeric_limits<T>::lowest();
-        auto maxVal = std::numeric_limits<T>::max();
-        pMin = Vector2(maxVal, maxVal);
-        pMax = Vector2(minVal, minVal);
-    }
+    Bounds2()
+        : pMin(std::numeric_limits<T>::max())
+        , pMax(std::numeric_limits<T>::lowest())
+    { }
 
     explicit Bounds2(const Vector2<T>& p) : pMin(p), pMax(p)
     { }

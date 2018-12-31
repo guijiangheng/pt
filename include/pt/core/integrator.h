@@ -15,7 +15,7 @@ public:
 
 class SamplerIntegrator : public Integrator {
 public:
-    SamplerIntegrator(Camera& camera, Sampler& sampler)
+    SamplerIntegrator(Camera& camera, Sampler& sampler) noexcept
         : camera(camera), sampler(sampler)
     { }
 

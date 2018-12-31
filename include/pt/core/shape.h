@@ -2,6 +2,7 @@
 #define PT_CORE_SHAPE_H
 
 #include <memory>
+#include <pt/math/bounds3.h>
 #include <pt/core/ray.h>
 #include <pt/core/frame.h>
 #include <pt/core/interaction.h>
@@ -11,6 +12,8 @@ namespace pt {
 class Shape {
 public:
     virtual ~Shape() = default;
+
+    virtual Bounds3 getBounds() const = 0;
 
     virtual bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const = 0;
 
@@ -23,9 +26,13 @@ public:
 
 class TransformedShape : public Shape {
 public:
-    TransformedShape(const Frame& frame, const std::shared_ptr<Shape>& shape)
+    TransformedShape(const Frame& frame, const std::shared_ptr<Shape>& shape) noexcept
         : frame(frame), shape(shape)
     { }
+
+    Bounds3 getBounds() const override {
+        return frame.toWorld(shape->getBounds());
+    }
 
     bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const override {
         auto newRay = frame.toLocal(ray);

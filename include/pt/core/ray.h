@@ -8,7 +8,7 @@ namespace pt {
 
 class Ray {
 public:
-    Ray(const Vector3& o, const Vector3& d, Float tMax = Infinity)
+    Ray(const Vector3& o, const Vector3& d, Float tMax = Infinity) noexcept
         : o(o), d(d), tMax(tMax)
     { }
 
