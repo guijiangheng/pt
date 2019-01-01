@@ -41,8 +41,8 @@ add_library(pt STATIC
     ${PT_CORE_SRCS}
 )
 
-add_executable(main src/main/main.cpp)
-target_link_libraries(main pt)
+add_executable(bunny src/main/bunny.cpp)
+target_link_libraries(bunny pt)
 
-add_executable(twosphere src/main/twosphere.cpp)
-target_link_libraries(twosphere pt)
+add_executable(ajax src/main/ajax.cpp)
+target_link_libraries(ajax pt)

@@ -61,8 +61,8 @@ public:
         if (tyMax <= tMin || tyMin >= tMax) return false;
         tMin = std::max(tMin, tyMin);
         tMax = std::min(tMax, tyMax);
-        auto tzMin = (b[dirIsNeg[1]].z - ray.o.z) * invDir.z;
-        auto tzMax = (b[1 - dirIsNeg[1]].z - ray.o.z) * invDir.z;
+        auto tzMin = (b[dirIsNeg[2]].z - ray.o.z) * invDir.z;
+        auto tzMax = (b[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
         if (tzMin >= tMax || tzMax <= tMin) return false;
         return true;
     }
