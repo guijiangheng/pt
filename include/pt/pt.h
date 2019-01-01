@@ -9,6 +9,9 @@ namespace pt {
     using Float = float;
 #endif
 
+constexpr Float ShadowEpsilon               = (Float)0.0001;
+constexpr Float TriangleIntersctEpsilon     = (Float)0.000001;
+
 }
 
 #endif

@@ -20,6 +20,7 @@ set(PT_CORE_HEADERS
     include/pt/core/camera.h
     include/pt/core/scene.h
     include/pt/core/integrator.h
+    include/pt/core/light.h
 
     include/pt/math/math.h
     include/pt/math/vector2.h

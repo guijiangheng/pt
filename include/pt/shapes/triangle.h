@@ -2,6 +2,7 @@
 #define PT_SHAPES_TRIANGLE_H
 
 #include <vector>
+#include <pt/pt.h>
 #include <pt/core/shape.h>
 
 namespace pt {
@@ -67,9 +68,9 @@ public:
         auto p = cross(ray.d, edge2);
         auto det = dot(p, edge1);
 
-        if (det < Float(0.000001) && det > -Float(0.000001))
+        if (std::abs(det) < TriangleIntersctEpsilon)
             return false;
-        
+
         auto t = ray.o - a;
         auto detInv = 1 / det;
         auto u = dot(p, t) * detInv;

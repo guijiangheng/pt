@@ -8,15 +8,15 @@ namespace pt {
 
 class Bounds3 {
 public:
-    Bounds3()
+    Bounds3() noexcept
         : pMin(std::numeric_limits<Float>::max())
         , pMax(std::numeric_limits<Float>::lowest())
     { }
 
-    explicit Bounds3(const Vector3& p) : pMin(p), pMax(p)
+    explicit Bounds3(const Vector3& p) noexcept : pMin(p), pMax(p)
     { }
 
-    Bounds3(const Vector3& a, const Vector3& b)
+    Bounds3(const Vector3& a, const Vector3& b) noexcept
         : pMin(min(a, b)), pMax(max(a, b))
     { }
 
