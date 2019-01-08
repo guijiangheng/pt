@@ -2,6 +2,7 @@
 #define PT_SHAPES_SPHERE_H
 
 #include <pt/core/shape.h>
+#include <pt/core/sampling.h>
 
 namespace pt {
 
@@ -26,6 +27,18 @@ public:
         isect.n = normalize(isect.p);
         isect.wo = -r.d;
         return true;
+    }
+
+    Float area() const override {
+        return 4 * Pi * radius * radius;
+    }
+
+    Interaction sample(const Vector2f& u, Float& pdf) const override {
+        Interaction isect;
+        isect.n = uniformSampleSphere(u);
+        isect.p = isect.n * radius;
+        pdf = 1 / area();
+        return isect;
     }
 
 private:

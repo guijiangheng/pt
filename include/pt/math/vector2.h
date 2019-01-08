@@ -22,6 +22,14 @@ public:
         , y((T)rhs.y)
     { }
 
+    Float& operator[](int index) {
+        return (&x)[index];
+    }
+
+    Float operator[](int index) const {
+        return (&x)[index];
+    }
+
     Vector2 operator+(const Vector2& v) const {
         return Vector2(x + v.x, y + v.y);
     }

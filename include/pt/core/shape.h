@@ -22,6 +22,30 @@ public:
         Interaction isect;
         return intersect(ray, tHit, isect);
     }
+
+    virtual Float area() const = 0;
+
+    virtual Interaction sample(const Vector2f& u, Float& pdf) const = 0;
+
+    virtual Float pdf(const Interaction& p) const {
+        return 1 / area();
+    }
+
+    virtual Interaction sample(const Interaction& ref, const Vector2f& u, Float& pdf) const {
+        auto p = sample(u, pdf);
+        auto d = p.p - ref.p;
+        auto wi = normalize(d);
+        pdf = d.lengthSquared() / absdot(p.n, wi);
+        return p;
+    }
+
+    virtual Float pdf(const Interaction& ref, const Vector3& wi) const {
+        auto ray = ref.spawnRay(wi);
+        Float tHit;
+        Interaction isect;
+        if (!intersect(ray, tHit, isect)) return 0;
+        return (isect.p - ref.p).lengthSquared() / (absdot(isect.n, wi) * area());
+    }
 };
 
 class TransformedShape : public Shape {
@@ -39,6 +63,18 @@ public:
         if (!shape->intersect(newRay, tHit, isect)) return false;
         isect = frame.toWorld(isect);
         return true;
+    }
+
+    Float area() const override {
+        return shape->area();
+    }
+
+    Interaction sample(const Vector2f& u, Float& pdf) const override {
+        auto p = shape->sample(u, pdf);
+        Interaction isect;
+        isect.p = frame.toWorldP(p.p);
+        isect.n = frame.toWorldN(p.n);
+        return isect;
     }
 
 public:

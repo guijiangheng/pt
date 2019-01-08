@@ -9,6 +9,7 @@ namespace pt {
     using Float = float;
 #endif
 
+constexpr Float RayOriginOffsetEpsilon      = (Float)0.00001;
 constexpr Float ShadowEpsilon               = (Float)0.0001;
 constexpr Float TriangleIntersctEpsilon     = (Float)0.000001;
 

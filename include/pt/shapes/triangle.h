@@ -4,6 +4,7 @@
 #include <vector>
 #include <pt/pt.h>
 #include <pt/core/shape.h>
+#include <pt/core/sampling.h>
 
 namespace pt {
 
@@ -89,6 +90,25 @@ public:
         isect.wo = -ray.d;
 
         return true;
+    }
+
+    Float area() const override {
+        auto& a = mesh.vertices[indices[0]];
+        auto& b = mesh.vertices[indices[1]];
+        auto& c = mesh.vertices[indices[2]];
+        return cross(b - a, c - a).length() / 2;
+    }
+
+    Interaction sample(const Vector2f& u, Float& pdf) const override {
+        auto uv = uniformSampleTriangle(u);
+        auto& a = mesh.vertices[indices[0]];
+        auto& b = mesh.vertices[indices[1]];
+        auto& c = mesh.vertices[indices[2]];
+        Interaction isect;
+        isect.p = a * uv[0] + b * uv[1] + c * (1 - uv[0] - uv[1]);
+        isect.n = normalize(cross(c - a, b - a));
+        pdf = 1 / area();
+        return isect;
     }
 
 public:

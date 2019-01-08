@@ -21,6 +21,7 @@ set(PT_CORE_HEADERS
     include/pt/core/scene.h
     include/pt/core/integrator.h
     include/pt/core/light.h
+    include/pt/core/sampling.h
 
     include/pt/math/math.h
     include/pt/math/vector2.h

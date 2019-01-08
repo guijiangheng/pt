@@ -16,16 +16,17 @@ class VisibilityTester {
 public:
     VisibilityTester() = default;
 
-    VisibilityTester(const Interaction& origin, const Interaction& target)
-        : origin(origin), target(target)
+    VisibilityTester(const Interaction& ref, const Vector3& target)
+        : ref(ref), target(target)
     { }
 
     bool unoccluded(const Scene& scene) const {
-        return !scene.intersect(origin.spawnRayTo(target));
+        return !scene.intersect(ref.spawnRayTo(target));
     }
 
 private:
-    Interaction origin, target;
+    Interaction ref;
+    Vector3 target;
 };
 
 class Light {
