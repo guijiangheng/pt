@@ -38,6 +38,27 @@ public:
         return Vector2(x - v.x, y - v.y);
     }
 
+    Vector2 operator*(T k) const {
+        return Vector2(x * k, y * k);
+    }
+
+    Vector2& operator*=(T k) {
+        x *= k;
+        y *= k;
+        return *this;
+    }
+
+    Vector2 operator/(T k) const {
+        return Vector2(x / k, y / k);
+    }
+
+    Vector2& operator/=(T k) {
+        auto inv = 1 / k;
+        x *= inv;
+        y *= inv;
+        return *this;
+    }
+
     bool operator==(const Vector2& v) const {
         return x == v.x && y == v.y;
     }
