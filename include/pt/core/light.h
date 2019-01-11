@@ -41,13 +41,27 @@ public:
                flags == LightFlags::DeltaDirection;
     }
 
+    virtual Vector3 le(const Ray& ray) const {
+        return Vector3(0);
+    }
+
     virtual Vector3 sampleLi(
         const Interaction& ref,
         const Vector2f& sample,
         Vector3& wi, Float& pdf, VisibilityTester& tester) const = 0;
+    
+    virtual Float pdf(const Interaction& ref, const Vector3& wi) const = 0;
 
 public:
-    LightFlags flags;    
+    LightFlags flags;
+};
+
+class AreaLight : public Light {
+public:
+    AreaLight() : Light(LightFlags::Area)
+    { }
+
+    virtual Vector3 le(const Interaction& p, const Vector3& w) const = 0;
 };
 
 }

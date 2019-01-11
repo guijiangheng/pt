@@ -15,7 +15,7 @@ public:
         : SamplerIntegrator(camera, sampler)
     { }
 
-    Vector3 Li(const Ray& ray, const Scene& scene) const override {
+    Vector3 li(const Ray& ray, const Scene& scene) const override {
         Interaction isect;
         if (scene.intersect(ray, isect))
             return abs(isect.n);

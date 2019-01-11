@@ -25,6 +25,10 @@ public:
         return itensity / (position - ref.p).lengthSquared();
     }
 
+    Float pdf(const Interaction& ref, const Vector3& wi) const override {
+        return 0;
+    }
+
 public:
     Vector3 position;
     Vector3 itensity;

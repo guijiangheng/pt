@@ -19,7 +19,7 @@ public:
         : camera(camera), sampler(sampler)
     { }
 
-    virtual Vector3 Li(const Ray& ray, const Scene& scene) const = 0;
+    virtual Vector3 li(const Ray& ray, const Scene& scene) const = 0;
 
     void render(const Scene& scene) override {
         for (auto p : camera.film.pixelBounds) {
@@ -28,13 +28,13 @@ public:
             do {
                 auto cameraSample = sampler.getCameraSample(p);
                 auto ray = camera.generateRay(cameraSample);
-                color += Li(ray, scene);
+                color += li(ray, scene);
             } while (sampler.startNextSample());
             camera.film.pixels.emplace_back(color / sampler.samplesPerPixel);
         }
     }
 
-private:
+protected:
     Camera& camera;
     Sampler& sampler;
 };

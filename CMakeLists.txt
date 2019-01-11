@@ -24,6 +24,7 @@ set(PT_CORE_HEADERS
     include/pt/core/sampling.h
     include/pt/core/bxdf.h
     include/pt/core/bsdf.h
+    include/pt/core/material.h
     include/pt/core/coordinate.h
 
     include/pt/math/math.h
@@ -35,6 +36,7 @@ set(PT_CORE_HEADERS
 )
 
 set(PT_CORE_SRCS
+    src/integrators/path.cpp
     src/math/matrix4.cpp
     src/accelerators/bvh.cpp
 )

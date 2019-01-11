@@ -1,9 +1,12 @@
 #ifndef PT_CORE_INTERACTION_H
 #define PT_CORE_INTERACTION_H
 
-#include <pt/math/vector3.h>
+#include <pt/core/ray.h>
 
 namespace pt {
+
+class BSDF;
+class Primitive;
 
 class Interaction {
 public:
@@ -30,6 +33,8 @@ public:
     Vector3 p;
     Vector3 n;
     Vector3 wo;
+    BSDF* bsdf;
+    Primitive* primitive;
 };
 
 }
