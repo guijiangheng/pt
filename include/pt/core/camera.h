@@ -29,12 +29,13 @@ public:
 
 class ProjectiveCamera : public Camera {
 public:
-    ProjectiveCamera(const Frame& frame, Film& film,
-                     const Matrix4& cameraToScreen,
-                     const Bounds2f& screenWindow,
-                     Float lensRadius, Float focalDistance) noexcept
-        : Camera(frame, film)
-        , lensRadius(lensRadius), focalDistance(focalDistance) {
+    ProjectiveCamera(
+        const Frame& frame, Film& film,
+        const Matrix4& cameraToScreen,
+        const Bounds2f& screenWindow,
+        Float lensRadius, Float focalDistance) noexcept
+            : Camera(frame, film)
+            , lensRadius(lensRadius), focalDistance(focalDistance) {
         
         auto screenToRaster = 
             Matrix4::scale(film.resolution.x, film.resolution.y, 1) *

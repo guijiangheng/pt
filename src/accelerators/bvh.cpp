@@ -1,4 +1,3 @@
-#include <array>
 #include <algorithm>
 #include <pt/accelerators/bvh.h>
 

@@ -20,6 +20,11 @@ public:
         bxdfs[nBxDFs++] = bxdf;
     }
 
+    bool isDelta() const {
+        if (nBxDFs == 1 && bxdfs[0]->match(BxDFType::Specular)) return true;
+        return false;
+    }
+
     Vector3 toLocal(const Vector3& w) const {
         return coord.toLocal(w);
     }
@@ -29,10 +34,10 @@ public:
     }
 
     Vector3 f(const Vector3& woWorld, const Vector3& wiWorld) const {
+        Vector3 f(0);
         auto wo = toLocal(woWorld);
         auto wi = toLocal(wiWorld);
         auto reflect = dot(wo, coord.n) * dot(wi, coord.n) > 0;
-        Vector3 f(0);
         for (auto i = 0; i < nBxDFs; ++i)
             if ((reflect && bxdfs[i]->match(BxDFType::Reflection)) ||
                 (!reflect && bxdfs[i]->match(BxDFType::Transmission)))
@@ -45,19 +50,23 @@ public:
         Vector2f uRemapped(u[0] * nBxDFs - n, u[1]);
         Vector3 wi, wo = toLocal(woWorld);
         auto f = bxdfs[n]->sampleF(uRemapped, wo, wi, pdf);
+
         for (auto i = 0; i < nBxDFs; ++i) {
             if (i == n) continue;
             pdf += bxdfs[i]->pdf(wo, wi);
         }
+
         pdf /= nBxDFs;
         wiWorld = toWorld(wi);
         auto reflect = dot(wo, coord.n) * dot(wi, coord.n) > 0;
+
         for (auto i = 0; i < n; ++i) {
             if (i == n) continue;
             if ((reflect && bxdfs[i]->match(BxDFType::Reflection)) ||
                 (!reflect && bxdfs[i]->match(BxDFType::Transmission)))
                 f += bxdfs[i]->f(wo, wi);
         }
+
         return f;
     }
 

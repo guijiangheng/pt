@@ -164,7 +164,6 @@ Mesh loadObjMesh(const std::string& filename) {
     );
 }
 
-
 }
 
 #endif
