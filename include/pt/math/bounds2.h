@@ -10,15 +10,17 @@ namespace pt {
 template <typename T>
 class Bounds2 {
 public:
-    Bounds2()
+    Bounds2() noexcept
         : pMin(std::numeric_limits<T>::max())
         , pMax(std::numeric_limits<T>::lowest())
     { }
 
-    explicit Bounds2(const Vector2<T>& p) : pMin(p), pMax(p)
+    explicit Bounds2(const Vector2<T>& p) noexcept
+        : pMin(p), pMax(p)
     { }
 
-    Bounds2(const Vector2<T>& pMin, const Vector2<T>& pMax) : pMin(pMin), pMax(pMax)
+    Bounds2(const Vector2<T>& pMin, const Vector2<T>& pMax) noexcept
+        : pMin(pMin), pMax(pMax)
     { }
 
     Vector2<T> diag() const {
@@ -39,7 +41,7 @@ using Bounds2f = Bounds2<Float>;
 
 class Bounds2iIterator : public std::forward_iterator_tag {
 public:
-    Bounds2iIterator(const Bounds2i& bounds, const Vector2i& p)
+    Bounds2iIterator(const Bounds2i& bounds, const Vector2i& p) noexcept
         : bounds(&bounds), p(p)
     { }
 

@@ -7,11 +7,11 @@ namespace pt {
 
 class CoordinateSystem {
 public:
-    explicit CoordinateSystem(const Vector3& n) : n(n) {
+    explicit CoordinateSystem(const Vector3& n) noexcept : n(n) {
         coordinateSystem(n, s, t);
     }
 
-    CoordinateSystem(const Vector3& n, const Vector3& s, const Vector3& t)
+    CoordinateSystem(const Vector3& n, const Vector3& s, const Vector3& t) noexcept
         : n(n), s(s), t(t)
     { }
 

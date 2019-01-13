@@ -34,7 +34,7 @@ class BVHAccel : public Primitive {
 public:
     BVHAccel(std::vector<Primitive*>&& prims) noexcept;
 
-    ~BVHAccel() {
+    ~BVHAccel() noexcept {
         for (auto p : primitives) {
             delete p;
         }
@@ -47,6 +47,18 @@ public:
     bool intersect(const Ray& ray, Interaction& isect) const override;
 
     bool intersect(const Ray& ray) const override;
+
+    const Material* getMaterial() const override {
+        throw std::runtime_error("Only ShapePrimitive supports getMaterial methods!");
+    };
+
+    const DiffuseAreaLight* getAreaLight() const override {
+        throw std::runtime_error("Only ShapePrimitive supports getAreaLight methods!");
+    }
+
+    void computeScatteringFunctions(Interaction& isect) const override {
+        throw std::runtime_error("Only ShapePrimitive supports computeScatteringFunctions methods!");
+    }
 
 private:
     BVHNode* createLeafNode(

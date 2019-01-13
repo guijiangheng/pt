@@ -7,7 +7,7 @@ namespace pt {
 
 class PathIntegrator : public SamplerIntegrator {
 public:
-    PathIntegrator(int maxDepth, Camera& camera, Sampler& sampler)
+    PathIntegrator(int maxDepth, Camera& camera, Sampler& sampler) noexcept
         : SamplerIntegrator(camera, sampler)
         , maxDepth(maxDepth)
     { }

@@ -8,10 +8,10 @@ namespace pt {
 
 class BSDF {
 public:
-    BSDF(const Interaction& isect) : nBxDFs(0), coord(isect.n)
+    BSDF(const Interaction& isect) noexcept : nBxDFs(0), coord(isect.n)
     { }
 
-    ~BSDF() {
+    ~BSDF() noexcept {
         for (auto i = 0; i < nBxDFs; ++i)
             delete bxdfs[i];
     }

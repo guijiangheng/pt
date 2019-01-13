@@ -8,7 +8,7 @@ namespace pt {
 
 class RandonSampler : public Sampler {
 public:
-    explicit RandonSampler(std::uint64_t samplesPerPixel)
+    explicit RandonSampler(std::uint64_t samplesPerPixel) noexcept
         : Sampler(samplesPerPixel)
         , device()
         , generator(device())

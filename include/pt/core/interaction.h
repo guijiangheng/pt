@@ -10,12 +10,12 @@ class Primitive;
 
 class Interaction {
 public:
-    Interaction() : bsdf(nullptr), primitive(nullptr)
+    Interaction() noexcept : bsdf(nullptr), primitive(nullptr)
     { }
 
     // used in point light sampleLi method
     // initialize n to zero to make sure offsetRayOrigin doesn't offset the ray origin
-    Interaction(const Vector3& p)
+    Interaction(const Vector3& p) noexcept
         : p(p), n(Vector3(0))
         , bsdf(nullptr), primitive(nullptr)
     { }
@@ -25,10 +25,7 @@ public:
         , bsdf(nullptr), primitive(nullptr)
     { }
 
-    // no need to delete primitive, because it is managed by scene
-    ~Interaction() {
-        if (bsdf) delete bsdf;
-    }
+    ~Interaction() noexcept;
 
     Vector3 offsetRayOrigin() const {
         return p + n * RayOriginOffsetEpsilon;
@@ -43,6 +40,8 @@ public:
         auto dest = target.offsetRayOrigin();
         return Ray(origin, dest - origin, 1 - ShadowEpsilon);
     }
+
+    Vector3 le(const Vector3& wo) const;
 
     void computeScatteringFunctions();
 

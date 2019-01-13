@@ -8,7 +8,7 @@ namespace pt {
 
 class PointLight : public Light {
 public:
-    PointLight(const Vector3& position, const Vector3& intensity)
+    PointLight(const Vector3& position, const Vector3& intensity) noexcept
         : Light(LightFlags::DeltaPosition)
         , position(position), intensity(intensity)
     { }

@@ -8,7 +8,7 @@ namespace pt {
 
 class Sphere : public Shape {
 public:
-    Sphere(Float radius = 1) : radius(radius)
+    Sphere(Float radius = 1) noexcept : radius(radius)
     { }
 
     Bounds3 getBounds() const override {

@@ -2,15 +2,14 @@
 #define PT_CORE_SCENE_H
 
 #include <vector>
-#include <pt/core/light.h>
 #include <pt/core/primitive.h>
 
 namespace pt {
 
 class Scene {
 public:
-    Scene(const Primitive& aggregate, std::vector<Light*>&& lights) noexcept
-        : aggregate(aggregate)
+    Scene(const Primitive& accel, std::vector<Light*>&& lights = std::vector<Light*>()) noexcept
+        : accel(accel)
         , lights(std::move(lights))
         , infiniteLight(nullptr) {
         
@@ -23,20 +22,20 @@ public:
         }
     }
 
-    ~Scene() {
+    ~Scene() noexcept {
         for (auto light : lights) delete light;
     }
 
     bool intersect(const Ray& ray, Interaction& isect) const {
-        return aggregate.intersect(ray, isect);
+        return accel.intersect(ray, isect);
     }
 
     bool intersect(const Ray& ray) const {
-        return aggregate.intersect(ray);
+        return accel.intersect(ray);
     }
 
 public:
-    const Primitive& aggregate;
+    const Primitive& accel;
     std::vector<Light*> lights;
     Light* infiniteLight;
 };

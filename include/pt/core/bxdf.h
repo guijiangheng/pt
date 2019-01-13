@@ -19,7 +19,7 @@ class BxDF {
 public:
     virtual ~BxDF() = default;
 
-    BxDF(BxDFType type): type(type)
+    BxDF(BxDFType type) noexcept : type(type)
     { }
 
     bool match(const BxDFType& type) const {

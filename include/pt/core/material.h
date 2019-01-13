@@ -9,7 +9,7 @@ class Material {
 public:
     Material() = default;
     virtual ~Material() = default;
-    virtual void computeScattering(Interaction& isect) const = 0;
+    virtual void computeScatteringFunctions(Interaction& isect) const = 0;
 };
 
 }

@@ -41,8 +41,10 @@ set(PT_CORE_HEADERS
 )
 
 set(PT_CORE_SRCS
-    src/integrators/path.cpp
+    src/core/interaction.cpp
+    src/core/visibilitytester.cpp
     src/math/matrix4.cpp
+    src/integrators/path.cpp
     src/accelerators/bvh.cpp
 )
 

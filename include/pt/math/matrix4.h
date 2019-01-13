@@ -15,10 +15,10 @@ public:
     }
 
     Matrix4(
-        float m00, float m01, float m02, float m03,
-        float m10, float m11, float m12, float m13,
-        float m20, float m21, float m22, float m23,
-        float m30, float m31, float m32, float m33
+        Float m00, Float m01, Float m02, Float m03,
+        Float m10, Float m11, Float m12, Float m13,
+        Float m20, Float m21, Float m22, Float m23,
+        Float m30, Float m31, Float m32, Float m33
     ) noexcept : e {
         m00, m01, m02, m03,
         m10, m11, m12, m13,
@@ -31,7 +31,7 @@ public:
         for (auto i = 0; i < 4; ++i)
             for (auto j = 0; j < 4; ++j)
                 r[i][j] = e[i][0] * m.e[0][j] + e[i][1] * m.e[1][j] +
-                            e[i][2] * m.e[2][j] + e[i][3] * m.e[3][j];
+                          e[i][2] * m.e[2][j] + e[i][3] * m.e[3][j];
         return Matrix4(r);
     }
 

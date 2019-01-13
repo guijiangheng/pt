@@ -27,7 +27,7 @@ std::vector<std::string> tokenize(const std::string& string, const std::string& 
 
 class ObjVertex {
 public:
-    ObjVertex() : p(0), n(0), uv(0)
+    ObjVertex() noexcept : p(0), n(0), uv(0)
     { }
 
     ObjVertex(const std::string& string) {

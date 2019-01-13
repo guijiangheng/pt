@@ -12,7 +12,7 @@ public:
     DiffuseAreaLight(
         const std::shared_ptr<Shape>& shape,
         const Vector3& intensity,
-        bool twoSided = false)
+        bool twoSided = false) noexcept
             : Light(LightFlags::Area)
             , shape(shape), intensity(intensity), twoSided(twoSided)
     { }
@@ -21,7 +21,7 @@ public:
         const Frame& frame,
         const std::shared_ptr<Shape>& shape,
         const Vector3& intensity,
-        bool twoSided = false)
+        bool twoSided = false) noexcept
             : Light(LightFlags::Area)
             , shape(std::make_shared<TransformedShape>(frame, shape))
             , intensity(intensity), twoSided(twoSided)
@@ -36,7 +36,6 @@ public:
         const Vector2f& sample,
         Vector3& wi, Float& pdf, VisibilityTester& tester) const override {
 
-        Float pdf;
         auto pLight = shape->sample(ref, sample, pdf);
         wi = normalize(pLight.p - ref.p);
         tester = VisibilityTester(ref, pLight);

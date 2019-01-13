@@ -1,11 +1,10 @@
 #ifndef PT_CORE_LIGHT_H
 #define PT_CORE_LIGHT_H
 
-#include <pt/math/vector3.h>
+#include <pt/core/ray.h>
 
 namespace pt {
 
-class Ray;
 class Interaction;
 class VisibilityTester;
 
@@ -20,7 +19,7 @@ class Light {
 public:
     virtual ~Light() = default;
 
-    Light(LightFlags flags) : flags(flags)
+    Light(LightFlags flags) noexcept : flags(flags)
     { }
 
     bool isDelta() const {

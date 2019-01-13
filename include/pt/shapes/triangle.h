@@ -13,11 +13,11 @@ public:
     Mesh(std::vector<int>&& indices,
          std::vector<Vector3>&& vertices,
          std::vector<Vector3>&& normals = std::vector<Vector3>(),
-         std::vector<Vector2f>&& uvs = std::vector<Vector2f>())
-        : indices(indices)
-        , vertices(vertices)
-        , normals(normals)
-        , uvs(uvs)
+         std::vector<Vector2f>&& uvs = std::vector<Vector2f>()) noexcept
+            : indices(std::move(indices))
+            , vertices(std::move(vertices))
+            , normals(std::move(normals))
+            , uvs(std::move(uvs))
     { }
 
     Mesh(const Frame& frame, const Mesh& mesh) : indices(mesh.indices) {
