@@ -26,6 +26,7 @@ set(PT_CORE_HEADERS
     include/pt/core/bsdf.h
     include/pt/core/material.h
     include/pt/core/coordinate.h
+    include/pt/core/visibilitytester.h
 
     include/pt/math/math.h
     include/pt/math/vector2.h
@@ -33,6 +34,10 @@ set(PT_CORE_HEADERS
     include/pt/math/matrix4.h
     include/pt/math/bounds2.h
     include/pt/math/bounds3.h
+    
+    include/pt/lights/diffuse.h
+    include/pt/lights/infinite.h
+    include/pt/lights/point.h
 )
 
 set(PT_CORE_SRCS

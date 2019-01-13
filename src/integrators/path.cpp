@@ -1,6 +1,7 @@
 #include <pt/core/bsdf.h>
 #include <pt/core/light.h>
 #include <pt/core/interaction.h>
+#include <pt/core/visibilitytester.h>
 #include <pt/integrators/path.h>
 
 namespace pt {
@@ -18,7 +19,7 @@ Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
             if (foundIntersection) {
                 l += beta * isect.le(-r.d);
             } else if (scene.infiniteLight) {
-                l += beta * scene.infiniteLight.le(r);
+                l += beta * scene.infiniteLight->le(r);
             }
         }
 
@@ -49,8 +50,7 @@ Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
 Vector3 PathIntegrator::estimateDirect(
     const Interaction& isect,
     const Light& light,
-    const Scene& scene,
-    const Vector2f& uLight, const Vector2f& uScattering) const {
+    const Scene& scene) const {
 
     Vector3 wi;
     Float lightPdf;
@@ -76,7 +76,7 @@ Vector3 PathIntegrator::estimateDirect(
     if (!light.isDelta() && !isect.bsdf->isDelta()) {
         Vector3 wi;
         Float scatteringPdf;
-        auto f = isect.bsdf->sampleF(sampler.get2D, isect.wo, wi, scatteringPdf);
+        auto f = isect.bsdf->sampleF(sampler.get2D(), isect.wo, wi, scatteringPdf);
         f *= absdot(isect.n, wi);
         if (f != Vector3(0)) {
             lightPdf = light.pdf(isect, wi);

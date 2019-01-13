@@ -1,32 +1,19 @@
 #ifndef PT_CORE_LIGHT_H
 #define PT_CORE_LIGHT_H
 
-#include <pt/core/scene.h>
+#include <pt/math/vector3.h>
 
 namespace pt {
+
+class Ray;
+class Interaction;
+class VisibilityTester;
 
 enum class LightFlags: int {
     DeltaPosition = 1,
     DeltaDirection = 2,
     Area = 4,
     Infinite = 8
-};
-
-class VisibilityTester {
-public:
-    VisibilityTester() = default;
-
-    VisibilityTester(const Interaction& ref, const Vector3& target)
-        : ref(ref), target(target)
-    { }
-
-    bool unoccluded(const Scene& scene) const {
-        return !scene.intersect(ref.spawnRayTo(target));
-    }
-
-private:
-    Interaction ref;
-    Vector3 target;
 };
 
 class Light {
@@ -54,14 +41,6 @@ public:
 
 public:
     LightFlags flags;
-};
-
-class AreaLight : public Light {
-public:
-    AreaLight() : Light(LightFlags::Area)
-    { }
-
-    virtual Vector3 le(const Interaction& p, const Vector3& w) const = 0;
 };
 
 }

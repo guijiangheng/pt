@@ -2,14 +2,15 @@
 #define PT_LIGHTS_POINT_H
 
 #include <pt/core/light.h>
+#include <pt/core/visibilitytester.h>
 
 namespace pt {
 
 class PointLight : public Light {
 public:
-    PointLight(const Vector3& position, const Vector3& itensity)
+    PointLight(const Vector3& position, const Vector3& intensity)
         : Light(LightFlags::DeltaPosition)
-        , position(position), itensity(itensity)
+        , position(position), intensity(intensity)
     { }
 
     Vector3 sampleLi(
@@ -21,8 +22,8 @@ public:
         wi = normalize(position - ref.p);
         tester = VisibilityTester(ref, position);
 
-        // no need to divide 4 * pi, because point light use itensity not power
-        return itensity / (position - ref.p).lengthSquared();
+        // no need to divide 4 * pi, because point light use intensity not power
+        return intensity / (position - ref.p).lengthSquared();
     }
 
     Float pdf(const Interaction& ref, const Vector3& wi) const override {
@@ -31,7 +32,7 @@ public:
 
 public:
     Vector3 position;
-    Vector3 itensity;
+    Vector3 intensity;
 };
 
 }
