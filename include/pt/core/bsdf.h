@@ -21,7 +21,7 @@ public:
     }
 
     bool isDelta() const {
-        if (nBxDFs == 1 && bxdfs[0]->match(BxDFType::Specular)) return true;
+        if (nBxDFs == 1 && bxdfs[0]->match(BXDF_SPECULAR)) return true;
         return false;
     }
 
@@ -39,8 +39,8 @@ public:
         auto wi = toLocal(wiWorld);
         auto reflect = dot(wo, coord.n) * dot(wi, coord.n) > 0;
         for (auto i = 0; i < nBxDFs; ++i)
-            if ((reflect && bxdfs[i]->match(BxDFType::Reflection)) ||
-                (!reflect && bxdfs[i]->match(BxDFType::Transmission)))
+            if ((reflect && bxdfs[i]->match(BXDF_REFLECTION)) ||
+                (!reflect && bxdfs[i]->match(BXDF_TRANSMISSION)))
                 f += bxdfs[i]->f(wo, wi);
         return f;
     }
@@ -62,8 +62,8 @@ public:
 
         for (auto i = 0; i < n; ++i) {
             if (i == n) continue;
-            if ((reflect && bxdfs[i]->match(BxDFType::Reflection)) ||
-                (!reflect && bxdfs[i]->match(BxDFType::Transmission)))
+            if ((reflect && bxdfs[i]->match(BXDF_REFLECTION)) ||
+                (!reflect && bxdfs[i]->match(BXDF_TRANSMISSION)))
                 f += bxdfs[i]->f(wo, wi);
         }
 

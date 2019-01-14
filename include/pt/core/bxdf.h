@@ -6,24 +6,25 @@
 
 namespace pt {
 
-enum class BxDFType : int {
-    Reflection      = 1 << 0,
-    Transmission    = 1 << 1,
-    Diffuse         = 1 << 2,
-    Glossy          = 1 << 3,
-    Specular        = 1 << 4,
-    All             = Reflection | Transmission | Diffuse | Glossy | Specular
+enum BxDFType {
+    BXDF_REFLECTION = 1 << 0,
+    BXDF_TRANSMISSION = 1 << 1,
+    BXDF_DIFFUSE = 1 << 2,
+    BXDF_GLOSSY = 1 << 3,
+    BXDF_SPECULAR = 1 << 4,
+    BXDF_ALL = BXDF_REFLECTION | BXDF_TRANSMISSION |
+              BXDF_DIFFUSE | BXDF_GLOSSY | BXDF_SPECULAR
 };
 
 class BxDF {
 public:
     virtual ~BxDF() = default;
 
-    BxDF(BxDFType type) noexcept : type(type)
+    explicit BxDF(BxDFType type) noexcept : type(type)
     { }
 
-    bool match(const BxDFType& type) const {
-        return ((int)this->type & (int)type) == (int)type;
+    bool match(BxDFType type) const {
+        return (this->type & type) == type;
     }
 
     virtual Vector3 sampleF(const Vector2f& u, const Vector3& wo, Vector3& wi, Float& pdf) const {

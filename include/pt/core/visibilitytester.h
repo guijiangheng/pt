@@ -12,13 +12,14 @@ public:
     VisibilityTester() = default;
 
     VisibilityTester(const Interaction& ref, const Interaction& target) noexcept
-        : ref(ref), target(target)
+        : ref(const_cast<Interaction*>(&ref)), target(target)
     { }
 
     bool unoccluded(const Scene& scene) const;
 
 private:
-    Interaction ref, target;
+    Interaction* ref;
+    Interaction target;
 };
 
 }

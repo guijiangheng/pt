@@ -25,16 +25,16 @@ public:
     // should point to same shape
     ShapePrimitive(
         const std::shared_ptr<Shape>& shape,
-        const std::shared_ptr<Material>& material,
-        const std::shared_ptr<DiffuseAreaLight>& light) noexcept
+        const std::shared_ptr<Material>& material = nullptr,
+        const std::shared_ptr<DiffuseAreaLight>& light = nullptr) noexcept
             : shape(shape), material(material), light(light)
     { }
 
     ShapePrimitive(
         const Frame& frame,
         const std::shared_ptr<Shape>& shape,
-        const std::shared_ptr<Material>& material,
-        const std::shared_ptr<DiffuseAreaLight>& light) noexcept
+        const std::shared_ptr<Material>& material = nullptr,
+        const std::shared_ptr<DiffuseAreaLight>& light = nullptr) noexcept
             : shape(std::make_shared<TransformedShape>(frame, shape))
             , material(material), light(light)
     { }
@@ -58,6 +58,7 @@ public:
     bool intersect(const Ray& ray, Interaction& isect) const override {
         Float tHit;
         if (!shape->intersect(ray, tHit, isect)) return false;
+        isect.primitive = this;
         ray.tMax = tHit;
         return true;
     }

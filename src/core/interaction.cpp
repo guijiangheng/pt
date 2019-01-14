@@ -13,4 +13,8 @@ Vector3 Interaction::le(const Vector3& wo) const {
     return areaLight ? areaLight->le(*this, wo) : Vector3(0);
 }
 
+void Interaction::computeScatteringFunctions() {
+    primitive->computeScatteringFunctions(*this);
+}
+
 }

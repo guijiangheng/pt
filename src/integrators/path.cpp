@@ -26,6 +26,9 @@ Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
         if (!foundIntersection) break;
 
         isect.computeScatteringFunctions();
+
+        if (!isect.bsdf) break;
+
         l += beta * sampleOneLight(isect, scene);
 
         Float pdf;

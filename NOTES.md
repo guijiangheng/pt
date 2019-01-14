@@ -18,3 +18,5 @@ SAH找不到最好的划分就用穷举法，穷举法找不到就直接构造�
         auto d = isect.p - p;
         return Ray(p, d, 1 - ShadowEpsilon)
     }
+
+## Material::computeScatteringFunctions时可以不为isect生成bsdf,比如Matte材质Kd=0时

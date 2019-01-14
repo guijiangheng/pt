@@ -1,9 +1,9 @@
 #ifndef PT_CORE_MATERIAL_H
 #define PT_CORE_MATERIAL_H
 
-namespace pt {
+#include <pt/core/interaction.h>
 
-class Interaction;
+namespace pt {
 
 class Material {
 public:

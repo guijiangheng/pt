@@ -20,7 +20,7 @@ public:
         
         pdf = 1;
         wi = normalize(position - ref.p);
-        tester = VisibilityTester(ref, position);
+        tester = VisibilityTester(ref, Interaction(position));
 
         // no need to divide 4 * pi, because point light use intensity not power
         return intensity / (position - ref.p).lengthSquared();

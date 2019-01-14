@@ -60,3 +60,6 @@ target_link_libraries(bunny pt)
 
 add_executable(ajax src/main/ajax.cpp)
 target_link_libraries(ajax pt)
+
+add_executable(point src/main/point.cpp)
+target_link_libraries(point pt)

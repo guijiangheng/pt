@@ -15,7 +15,7 @@ public:
 
     // used in point light sampleLi method
     // initialize n to zero to make sure offsetRayOrigin doesn't offset the ray origin
-    Interaction(const Vector3& p) noexcept
+    explicit Interaction(const Vector3& p) noexcept
         : p(p), n(Vector3(0))
         , bsdf(nullptr), primitive(nullptr)
     { }
@@ -50,7 +50,7 @@ public:
     Vector3 n;
     Vector3 wo;
     BSDF* bsdf;
-    Primitive* primitive;
+    const Primitive* primitive;
 };
 
 }
