@@ -8,7 +8,10 @@ namespace pt {
 
 class Scene {
 public:
-    Scene(const Primitive& accel, std::vector<Light*>&& lights = std::vector<Light*>()) noexcept
+    Scene(
+        const Primitive& accel,
+        std::vector<std::shared_ptr<Light>>&& lights = std::vector<std::shared_ptr<Light>>()) noexcept
+        
         : accel(accel)
         , lights(std::move(lights))
         , infiniteLight(nullptr) {
@@ -16,14 +19,10 @@ public:
         // only one infinite area light is supported
         for (auto light : lights) {
             if (light->flags == LightFlags::Infinite) {
-                infiniteLight = light;
+                infiniteLight = light.get();
                 break;
             }
         }
-    }
-
-    ~Scene() noexcept {
-        for (auto light : lights) delete light;
     }
 
     bool intersect(const Ray& ray, Interaction& isect) const {
@@ -36,7 +35,7 @@ public:
 
 public:
     const Primitive& accel;
-    std::vector<Light*> lights;
+    std::vector<std::shared_ptr<Light>> lights;
     Light* infiniteLight;
 };
 

@@ -22,8 +22,8 @@ int main() {
 
     BVHAccel accel(std::move(primitives));
 
-    std::vector<Light*> lights;
-    lights.push_back(new PointLight(Vector3(-20, 40, -20), Vector3(2995)));
+    std::vector<std::shared_ptr<Light>> lights;
+    lights.push_back(std::make_shared<PointLight>(Vector3(-20, 40, -20), Vector3(2995)));
 
     Scene scene(accel, std::move(lights));
 

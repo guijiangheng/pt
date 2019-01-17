@@ -17,6 +17,10 @@ public:
     Frame (const Matrix4& m, const Matrix4& mInv) noexcept : m(m), mInv(mInv)
     { }
 
+    Frame operator*(const Frame& frame) const {
+        return Frame(m * frame.m, frame.mInv * mInv);
+    }
+
     Vector3 toLocalV(const Vector3& v) const {
         return mInv.applyV(v);
     }

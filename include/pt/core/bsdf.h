@@ -37,7 +37,7 @@ public:
         Vector3 f(0);
         auto wo = toLocal(woWorld);
         auto wi = toLocal(wiWorld);
-        auto reflect = dot(wo, coord.n) * dot(wi, coord.n) > 0;
+        auto reflect = dot(woWorld, coord.n) * dot(wiWorld, coord.n) > 0;
         for (auto i = 0; i < nBxDFs; ++i)
             if ((reflect && bxdfs[i]->match(BXDF_REFLECTION)) ||
                 (!reflect && bxdfs[i]->match(BXDF_TRANSMISSION)))

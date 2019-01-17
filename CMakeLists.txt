@@ -63,3 +63,6 @@ target_link_libraries(ajax pt)
 
 add_executable(point src/main/point.cpp)
 target_link_libraries(point pt)
+
+add_executable(cbox src/main/cbox.cpp)
+target_link_libraries(cbox pt)
