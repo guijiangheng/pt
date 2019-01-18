@@ -27,18 +27,18 @@ public:
 
     ~Interaction() noexcept;
 
-    Vector3 offsetRayOrigin() const {
-        return p + n * RayOriginOffsetEpsilon;
+    Vector3 offsetRayOrigin(const Vector3& w) const {
+        return p + faceForward(n, w) * RayOriginOffsetEpsilon;
     }
 
     Ray spawnRay(const Vector3& wi) const {
-        return Ray(offsetRayOrigin(), wi, Infinity);
+        return Ray(offsetRayOrigin(wi), wi, Infinity);
     }
 
     Ray spawnRayTo(const Interaction& target) const {
-        auto origin = offsetRayOrigin();
-        auto dest = target.offsetRayOrigin();
-        return Ray(origin, dest - origin, 1 - ShadowEpsilon);
+        auto w = target.p - p;
+        auto origin = offsetRayOrigin(normalize(w));
+        return Ray(origin, w, 1 - ShadowEpsilon);
     }
 
     Vector3 le(const Vector3& wo) const;

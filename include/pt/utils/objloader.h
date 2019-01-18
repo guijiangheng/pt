@@ -99,6 +99,7 @@ Mesh loadObjMesh(const std::string& filename) {
         } else if (prefix == "vn") {
             Vector3 n;
             line >> n.x >> n.y >> n.z;
+            n.z = -n.z;
             normals.push_back(n);
         } else if (prefix == "f") {
             std::string v1, v2, v3, v4;

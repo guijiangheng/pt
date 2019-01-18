@@ -86,8 +86,16 @@ public:
 
         tHit = dist;
         isect.p = a + edge1 * u + edge2 * v;
-        isect.n = normalize(cross(edge2, edge1));
         isect.wo = -ray.d;
+        
+        if (mesh.normals.size() > 0) {
+            auto& na = mesh.normals[indices[0]];
+            auto& nb = mesh.normals[indices[1]];
+            auto& nc = mesh.normals[indices[2]];
+            isect.n = normalize(na * (1 - u - v) + nb * u + nc * v);
+        } else {
+            isect.n = normalize(cross(edge2, edge1));
+        }
 
         return true;
     }

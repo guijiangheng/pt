@@ -155,6 +155,10 @@ inline Vector3 lerp(const Vector3& a, const Vector3& b, Float t) {
     return a + (b - a) * t;
 }
 
+inline Vector3 faceForward(const Vector3& n, const Vector3& v) {
+    return dot(n, v) > 0 ? n : -n;
+}
+
 inline Vector3 normalize(const Vector3& v) {
     return v / v.length();
 }

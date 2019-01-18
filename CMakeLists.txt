@@ -41,6 +41,7 @@ set(PT_CORE_HEADERS
 )
 
 set(PT_CORE_SRCS
+    src/core/fresnel.cpp
     src/core/interaction.cpp
     src/core/visibilitytester.cpp
     src/math/matrix4.cpp
@@ -66,3 +67,6 @@ target_link_libraries(point pt)
 
 add_executable(cbox src/main/cbox.cpp)
 target_link_libraries(cbox pt)
+
+add_executable(glass src/main/glass.cpp)
+target_link_libraries(glass pt)

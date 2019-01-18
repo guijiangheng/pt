@@ -28,7 +28,7 @@ int main() {
     Scene scene(accel, std::move(lights));
 
     Film film(
-        Vector2i(512, 512),
+        Vector2i(800, 800),
         Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
     );
 
