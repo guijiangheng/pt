@@ -70,3 +70,6 @@ target_link_libraries(cbox pt)
 
 add_executable(glass src/main/glass.cpp)
 target_link_libraries(glass pt)
+
+add_executable(table src/main/table.cpp)
+target_link_libraries(table pt)

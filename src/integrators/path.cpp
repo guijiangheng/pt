@@ -41,10 +41,10 @@ Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
         beta *= f * absdot(isect.n, wi) / pdf;
         r = isect.spawnRay(wi);
 
-        if (bounce > 3) {
-            if (sampler.get1D() < (Float)0.8) break;
-            beta *= 5;
-        }
+        // if (bounce > 3) {
+        //     if (sampler.get1D() < (Float)0.8) break;
+        //     beta *= 5;
+        // }
     }
 
     return l;

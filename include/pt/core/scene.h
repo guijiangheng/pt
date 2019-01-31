@@ -11,10 +11,9 @@ public:
     Scene(
         const Primitive& accel,
         std::vector<std::shared_ptr<Light>>&& lights = std::vector<std::shared_ptr<Light>>()) noexcept
-        
-        : accel(accel)
-        , lights(std::move(lights))
-        , infiniteLight(nullptr) {
+            : accel(accel)
+            , lights(std::move(lights))
+            , infiniteLight(nullptr) {
         
         // only one infinite area light is supported
         for (auto light : lights) {
