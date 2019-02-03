@@ -20,7 +20,7 @@ public:
             Vector2i(std::ceil(resolution.x * cropWindow.pMax.x), std::ceil(resolution.y * cropWindow.pMax.y))
         ) {
 
-        pixels.reserve(pixelBounds.area());
+        pixels.resize(pixelBounds.area());
     }
 
     void writeImage(const std::string& name) {

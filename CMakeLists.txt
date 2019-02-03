@@ -20,6 +20,7 @@ set(PT_CORE_HEADERS
     include/pt/core/camera.h
     include/pt/core/scene.h
     include/pt/core/integrator.h
+    include/pt/core/parallel.h
     include/pt/core/light.h
     include/pt/core/sampling.h
     include/pt/core/bxdf.h
@@ -41,6 +42,7 @@ set(PT_CORE_HEADERS
 )
 
 set(PT_CORE_SRCS
+    src/core/parallel.cpp
     src/core/fresnel.cpp
     src/core/interaction.cpp
     src/core/visibilitytester.cpp
@@ -57,19 +59,19 @@ add_library(pt STATIC
 )
 
 add_executable(bunny src/main/bunny.cpp)
-target_link_libraries(bunny pt)
+target_link_libraries(bunny pt pthread)
 
 add_executable(ajax src/main/ajax.cpp)
-target_link_libraries(ajax pt)
+target_link_libraries(ajax pt pthread)
 
 add_executable(point src/main/point.cpp)
-target_link_libraries(point pt)
+target_link_libraries(point pt pthread)
 
 add_executable(cbox src/main/cbox.cpp)
-target_link_libraries(cbox pt)
+target_link_libraries(cbox pt pthread)
 
 add_executable(glass src/main/glass.cpp)
-target_link_libraries(glass pt)
+target_link_libraries(glass pt pthread)
 
 add_executable(table src/main/table.cpp)
-target_link_libraries(table pt)
+target_link_libraries(table pt pthread)

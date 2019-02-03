@@ -15,6 +15,10 @@ public:
         , distribution(0, 1)
     { }
 
+    std::unique_ptr<Sampler> clone(int seed) const override {
+        return std::unique_ptr<Sampler>(new RandonSampler(samplesPerPixel));
+    }
+
     Float get1D() override {
         return distribution(generator);
     }

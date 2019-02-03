@@ -15,6 +15,8 @@ public:
         : samplesPerPixel(samplesPerPixel)
     { }
 
+    virtual std::unique_ptr<Sampler> clone(int seed) const = 0;
+
     virtual Float get1D() = 0;
     
     virtual Vector2f get2D() = 0;
