@@ -130,7 +130,7 @@ void parallelFor2D(std::function<void(const Vector2i&)> func, const Vector2i& co
             auto beg = loop.nextIndex;
             auto end = std::min(loop.nextIndex + 1, loop.count);
             loop.nextIndex = end;
-            if (loop.nextIndex = loop.count) workList = loop.next;
+            if (loop.nextIndex == loop.count) workList = loop.next;
             ++loop.activeThreads;
             lock.unlock();
             loop.func2D(Vector2i(beg % loop.countX, beg / loop.countX));
