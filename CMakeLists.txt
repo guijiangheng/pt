@@ -39,6 +39,9 @@ set(PT_CORE_HEADERS
     include/pt/lights/diffuse.h
     include/pt/lights/infinite.h
     include/pt/lights/point.h
+
+    include/pt/utils/objloader.h
+    include/pt/utils/plyloader.h
 )
 
 set(PT_CORE_SRCS
