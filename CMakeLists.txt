@@ -78,3 +78,6 @@ target_link_libraries(glass pt pthread)
 
 add_executable(table src/main/table.cpp)
 target_link_libraries(table pt pthread)
+
+add_executable(dragon src/main/dragon.cpp)
+target_link_libraries(dragon pt pthread)

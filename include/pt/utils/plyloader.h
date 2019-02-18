@@ -39,7 +39,6 @@ public:
     { }
 
     virtual ~Property() = default;
-
     virtual void parse(std::istringstream& lineStream) = 0;
     virtual void read(std::ifstream& stream) = 0;
     virtual void writeHeader(std::ofstream& stream) const = 0;
@@ -309,7 +308,7 @@ public:
     void addProperty(std::unique_ptr<Property>&& property) {
         if (hasProperty(property->name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties[property->name] = std::move(property);
+        properties.emplace(name, std::move(property));
     }
 
     template <typename T>
@@ -318,7 +317,7 @@ public:
             throw std::runtime_error("PLY loader: new property " + name + " has size which does not match element");
         if (hasProperty(name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties[name] = std::unique_ptr<Property>(new TypedProperty<T>(name, data));
+        properties.emplace(name, std::unique_ptr<Property>(new TypedProperty<T>(name, data)));
     }
 
     template <typename T>
@@ -327,7 +326,7 @@ public:
             throw std::runtime_error("PLY loader: new property " + name + " has size which does not match element");
         if (hasProperty(name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties[name] = std::unique_ptr<Property>(new TypedListProperty<T>(data));
+        properties.emplace(name, std::unique_ptr<Property>(new TypedListProperty<T>(data)));
     }
 
     bool hasProperty(const std::string& name) const {
@@ -337,14 +336,14 @@ public:
     template <typename T>
     std::vector<T> getProperty(const std::string& name) {
         if (!hasProperty(name))
-            throw std::runtime_error("PLY loader: element hove no property with name: " + name + ".");
+            throw std::out_of_range("PLY loader: element hove no property with name: " + name + ".");
         return dynamic_cast<TypedListProperty<T>*>(properties[name].get())->data;
     }
 
     template <typename T>
     std::vector<std::vector<T>> getListProperty(const std::string& name) {
         if (!hasProperty(name))
-            throw std::runtime_error("PLY loader: element hove no property with name: " + name + ".");
+            throw std::out_of_range("PLY loader: element hove no property with name: " + name + ".");
         return dynamic_cast<TypedListProperty<T>*>(properties[name].get())->data;
     }
 
@@ -481,14 +480,14 @@ public:
     Element& getElement(const std::string& name) {
         if (!hasElement(name))
             throw std::runtime_error("PLY loader: count not find element with name: " + name + ".");
-        return elements[name];
+        return elements.at(name);
     }
 
     void addElement(const std::string& name, size_t count) {
         if (hasElement(name))
             throw std::runtime_error("PLY loader: element " + name + "already exist.");
-        elements[name] = Element(name, count);
-        lastElement = &elements[name];
+        elements.emplace(name, Element(name, count));
+        lastElement = &elements.at(name);
     }
 
 private:
