@@ -11,20 +11,6 @@
 
 using namespace pt;
 
-class NormalIntegrator : public SamplerIntegrator {
-public:
-    NormalIntegrator(Camera& camera, Sampler& sampler)
-        : SamplerIntegrator(camera, sampler)
-    { }
-
-    Vector3 li(const Ray& ray, const Scene& scene) const override {
-        Interaction isect;
-        if (scene.intersect(ray, isect))
-            return max(isect.n, Vector3(0));
-        return Vector3(0);
-    }
-};
-
 int main() {
     std::vector<Primitive*> prims;
     std::vector<std::shared_ptr<Light>> lights;

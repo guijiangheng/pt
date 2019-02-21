@@ -7,7 +7,6 @@
 #include <pt/utils/objloader.h>
 
 using namespace pt;
-using namespace std;
 
 class NormalIntegrator : public SamplerIntegrator {
 public:
