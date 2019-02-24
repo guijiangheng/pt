@@ -509,7 +509,7 @@ public:
         std::vector<int> indices;
         indices.reserve(indices.size() * 6);
         for (auto& list : lists) {
-            if (list.size() != 3 || list.size() != 4) continue;
+            if (list.size() != 3 && list.size() != 4) continue;
             indices.emplace_back(list[0]);
             indices.emplace_back(list[1]);
             indices.emplace_back(list[2]);
