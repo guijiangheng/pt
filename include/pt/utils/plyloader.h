@@ -57,6 +57,7 @@ public:
     virtual void writeHeader(std::ofstream& stream) const = 0;
     virtual void writeText(std::ofstream& stream, size_t iElement) const = 0;
     virtual void writeBinary(std::ofstream& stream, size_t iElement) const = 0;
+    virtual void reserve(size_t count) = 0;
     virtual size_t size() const = 0;
     virtual std::string getPropertyTypeName() const = 0;
 
@@ -99,6 +100,10 @@ public:
 
     void writeBinary(std::ofstream& stream, size_t iElement) const override {
         stream.write((char*)&data[iElement], sizeof(T));
+    }
+
+    void reserve(size_t count) override {
+        data.reserve(count);
     }
 
     size_t size() const override {
@@ -196,6 +201,10 @@ public:
             throw std::runtime_error("PLY loader: list property has a element with more entries than fit in a uchar.");
         stream.write((char*)&count, sizeof(uint8_t));
         for (auto e : elemList) stream.write((char*)&e, sizeof(T));
+    }
+
+    void reserve(size_t count) override {
+        data.reserve(count);
     }
 
     size_t size() const override {
@@ -366,19 +375,16 @@ public:
     Element(const std::string& name, size_t count) noexcept : name(name), count(count)
     { }
 
-    ~Element() {
-        for (auto& property : properties)
-            delete property.second;
-    }
-
     bool hasProperty(const std::string& name) const {
-        return properties.find(name) != properties.end();
+        for (auto& property : properties)
+            if (property->name == name) return true;
+        return false;
     }
 
     const Property* getPropertyPtr(const std::string& name) const {
-        if (!hasProperty(name))
-            throw std::out_of_range("PLY loader: element hove no property with name: " + name + ".");
-        return properties.at(name);
+        for (auto& property : properties)
+            if (property->name == name) return property.get();
+        throw std::out_of_range("PLY loader: element hove no property with name: " + name + ".");
     }
 
     template <typename T>
@@ -402,7 +408,7 @@ public:
     void addProperty(Property* property) {
         if (hasProperty(property->name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties.emplace(property->name, property);
+        properties.emplace_back(property);
     }
 
     template <typename T>
@@ -411,7 +417,7 @@ public:
             throw std::runtime_error("PLY loader: new property " + name + " has size which does not match element");
         if (hasProperty(name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties.emplace(name, new TypedProperty<T>(name, std::move(data)));
+        properties.emplace_back(name, new TypedProperty<T>(name, std::move(data)));
     }
 
     template <typename T>
@@ -420,19 +426,19 @@ public:
             throw std::runtime_error("PLY loader: new property " + name + " has size which does not match element");
         if (hasProperty(name))
             throw std::runtime_error("PLY loader: element already has property with name: " + name + ".");
-        properties.emplace(name, new TypedListProperty<T>(std::move(data)));
+        properties.emplace_back(name, new TypedListProperty<T>(std::move(data)));
     }
 
     void writeHeader(std::ofstream& stream) const {
         stream << "element " << name << " " << count << std::endl;
         for (auto& property : properties)
-            property.second->writeHeader(stream);
+            property->writeHeader(stream);
     }
 
     void writeText(std::ofstream& stream) const {
         for (size_t i = 0; i < count; ++i) {
             for (auto& property : properties)
-                property.second->writeText(stream, i);
+                property->writeText(stream, i);
             stream << std::endl;
         }
     }
@@ -440,7 +446,7 @@ public:
     void writeBinary(std::ofstream& stream) const {
         for (size_t i = 0; i < count; ++i)
             for (auto& property : properties)
-                property.second->writeBinary(stream, i);
+                property->writeBinary(stream, i);
     }
 
     size_t size() const {
@@ -450,7 +456,7 @@ public:
 public:
     size_t count;
     std::string name;
-    std::map<std::string, Property*> properties;
+    std::vector<std::unique_ptr<Property>> properties;
 };
 
 enum class DataFormat { Text, Binary };
@@ -468,20 +474,21 @@ public:
     }
 
     bool hasElement(const std::string& name) const {
-        return elements.find(name) != elements.end();
+        for (auto& element : elements)
+            if (element.name == name) return true;
+        return false;
     }
 
     const Element& getElement(const std::string& name) const {
-        if (!hasElement(name))
-            throw std::runtime_error("PLY loader: count not find element with name: " + name + ".");;
-        return elements.at(name);
+        for (auto& element : elements)
+            if (element.name == name) return element;
+        throw std::runtime_error("PLY loader: count not find element with name: " + name + ".");;
     }
 
     void addElement(const std::string& name, size_t count) {
         if (hasElement(name))
             throw std::runtime_error("PLY loader: element " + name + "already exist.");
-        elements.emplace(name, Element(name, count));
-        lastElement = &elements.at(name);
+        elements.emplace_back(name, count);
     }
 
     std::vector<Vector3> getVertexPositions() const {
@@ -548,36 +555,36 @@ public:
     }
 
     void parsePropertyHeader(std::istringstream& stream) {
-        if (!lastElement) throw std::runtime_error("PLY loader: encounter property header before any element header.");
+        if (elements.empty()) throw std::runtime_error("PLY loader: encounter property header before any element header.");
         std::string firstToken;
         stream >> firstToken;
         if (firstToken == "list") {
             std::string countType, type, name;
             stream >> countType >> type >> name;
-            lastElement->addProperty(createProperty(true, name, type, countType));
+            elements.back().addProperty(createProperty(true, name, type, countType));
         } else {
             std::string type, name;
             type = firstToken;
             stream >> name;
-            lastElement->addProperty(createProperty(false, name, type, ""));
+            elements.back().addProperty(createProperty(false, name, type, ""));
         }
     }
 
     void parseBinaryBody(std::ifstream& stream) {
         for (auto& element : elements)
-            for (auto i = 0; i < element.second.count; ++i)
-                for (auto& property : element.second.properties)
-                    property.second->read(stream);
+            for (auto i = 0; i < element.count; ++i)
+                for (auto& property : element.properties)
+                    property->read(stream);
     }
 
     void parseTextBody(std::ifstream& stream) {
         for (auto& element : elements)
-            for (auto i = 0; i < element.second.count; ++i) {
+            for (auto i = 0; i < element.count; ++i) {
                 std::string line;
                 std::getline(stream, line);
                 std::istringstream lineStream(line);
-                for (auto& property : element.second.properties)
-                    property.second->parse(lineStream);
+                for (auto& property : element.properties)
+                    property->parse(lineStream);
             }
     }
 
@@ -586,8 +593,8 @@ public:
         if (file.fail()) throw std::runtime_error("PLY loader: count not open file " + filename + ".");
         writeHeader(file, format);
         for (auto& element : elements) {
-            if (format == DataFormat::Text) element.second.writeText(file);
-            else element.second.writeBinary(file);
+            if (format == DataFormat::Text) element.writeText(file);
+            else element.writeBinary(file);
         }
     }
 
@@ -597,14 +604,13 @@ public:
         if (format == DataFormat::Text) stream << "ascii ";
         else stream << "binary_little_endian ";
         stream << "1.0" << std::endl;
-        for (auto& element : elements) element.second.writeHeader(stream);
+        for (auto& element : elements) element.writeHeader(stream);
         stream << "end_header" << std::endl;
     }
 
 public:
     DataFormat inputFormat = DataFormat::Text;
-    Element* lastElement = nullptr;
-    std::map<std::string, Element> elements;
+    std::vector<Element> elements;
 };
 
 Mesh loadPLYMesh(const std::string& filename) {
