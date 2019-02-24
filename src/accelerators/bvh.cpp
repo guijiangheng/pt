@@ -48,7 +48,7 @@ BVHAccel::BVHAccel(std::vector<Primitive*>&& prims) noexcept : primitives(std::m
     std::vector<PrimInfo> primInfos;
     primInfos.reserve(size);
     for (auto i = 0; i < size; ++i)
-        primInfos.emplace_back(i, primitives[i]->getBounds());
+        primInfos.emplace_back(i, primitives[i]->worldBound());
 
     int totalNodes = 0;
     std::vector<Primitive*> orderedPrims;

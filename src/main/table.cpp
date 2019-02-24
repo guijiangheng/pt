@@ -20,7 +20,7 @@ int main() {
     for (auto& triangle : triangles) {
         auto light = std::make_shared<DiffuseAreaLight>(triangle, Vector3(3, 3, 2.5));
         lights.push_back(light);
-        prims.push_back(new ShapePrimitive(triangle, nullptr, light));
+        prims.push_back(new GeometricPrimitive(triangle, nullptr, light));
     }
 
     auto lightMesh2 = Mesh(Frame::translate(0, 0, -60) * Frame::scale(0.3, 0.3, -1), mesh);
@@ -28,7 +28,7 @@ int main() {
     for (auto& triangle : triangles) {
         auto light = std::make_shared<DiffuseAreaLight>(triangle, Vector3(1, 1, 1.6));
         lights.push_back(light);
-        prims.push_back(new ShapePrimitive(triangle, nullptr, light));
+        prims.push_back(new GeometricPrimitive(triangle, nullptr, light));
     }
 
     auto plateMesh = Mesh(
@@ -38,7 +38,7 @@ int main() {
     auto plateMaterial = std::make_shared<MatteMaterial>(Vector3(1, 0, 0));
     triangles = createTriangleMesh(plateMesh);
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, plateMaterial));
+        prims.push_back(new GeometricPrimitive(triangle, plateMaterial));
 
 
     auto floorMesh = Mesh(
@@ -48,7 +48,7 @@ int main() {
     triangles = createTriangleMesh(floorMesh);
     auto floorMaterial = std::make_shared<MatteMaterial>(Vector3(0.5, 0.5, 0.5));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, floorMaterial));
+        prims.push_back(new GeometricPrimitive(triangle, floorMaterial));
 
     auto glass1Mesh = Mesh(
         Frame::translate(-1, 0, 0),
@@ -57,7 +57,7 @@ int main() {
     triangles = createTriangleMesh(glass1Mesh);
     auto glass1Material = std::make_shared<GlassMaterial>(Vector3(1), Vector3(1), 1.33);
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, glass1Material));
+        prims.push_back(new GeometricPrimitive(triangle, glass1Material));
 
     auto glass2Mesh = Mesh(
         Frame::translate(-1, 0, 0),
@@ -66,7 +66,7 @@ int main() {
     triangles = createTriangleMesh(glass2Mesh);
     auto glass2Material = std::make_shared<GlassMaterial>(Vector3(1), Vector3(1), 1.5);
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, glass2Material));
+        prims.push_back(new GeometricPrimitive(triangle, glass2Material));
     
     auto glass3Mesh = Mesh(
         Frame::translate(-1, 0, 0),
@@ -75,7 +75,7 @@ int main() {
     triangles = createTriangleMesh(glass3Mesh);
     auto glass3Material = std::make_shared<GlassMaterial>(Vector3(1), Vector3(1), 0.8866667);
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, glass3Material));
+        prims.push_back(new GeometricPrimitive(triangle, glass3Material));
     
     BVHAccel accel(std::move(prims));
     Scene scene(accel, std::move(lights));
@@ -94,7 +94,7 @@ int main() {
         0, 0, 35
     );
 
-    RandonSampler sampler(512);
+    RandonSampler sampler(16);
     PathIntegrator integrator(20, camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");

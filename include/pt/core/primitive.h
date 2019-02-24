@@ -10,7 +10,7 @@ namespace pt {
 class Primitive {
 public:
     virtual ~Primitive() = default;
-    virtual Bounds3 getBounds() const = 0;
+    virtual Bounds3 worldBound() const = 0;
     virtual bool intersect(const Ray& ray, Interaction& isect) const = 0;
     virtual bool intersect(const Ray& ray) const = 0;
     virtual const Material* getMaterial() const = 0;
@@ -18,29 +18,20 @@ public:
     virtual void computeScatteringFunctions(Interaction& isect) const = 0;
 };
 
-class ShapePrimitive : public Primitive {
+class GeometricPrimitive : public Primitive {
 public:
     // careful, primitive should only set neither material or light property, but not both
     // if area light is setted, area light's shape and primitive's shape
     // should point to same shape
-    ShapePrimitive(
+    GeometricPrimitive(
         const std::shared_ptr<Shape>& shape,
         const std::shared_ptr<Material>& material = nullptr,
         const std::shared_ptr<DiffuseAreaLight>& light = nullptr) noexcept
             : shape(shape), material(material), light(light)
     { }
 
-    ShapePrimitive(
-        const Frame& frame,
-        const std::shared_ptr<Shape>& shape,
-        const std::shared_ptr<Material>& material = nullptr,
-        const std::shared_ptr<DiffuseAreaLight>& light = nullptr) noexcept
-            : shape(std::make_shared<TransformedShape>(frame, shape))
-            , material(material), light(light)
-    { }
-
-    Bounds3 getBounds() const override {
-        return shape->getBounds();
+    Bounds3 worldBound() const override {
+        return shape->worldBound();
     }
 
     const Material* getMaterial() const override {

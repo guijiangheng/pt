@@ -40,7 +40,7 @@ public:
         }
     }
 
-    Bounds3 getBounds() const override {
+    Bounds3 worldBound() const override {
         return nodes[0].bounds;
     }
 

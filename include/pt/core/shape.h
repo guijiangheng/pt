@@ -11,9 +11,16 @@ namespace pt {
 
 class Shape {
 public:
+    Shape(const Frame* frame) noexcept : frame(frame)
+    { }
+
     virtual ~Shape() = default;
 
-    virtual Bounds3 getBounds() const = 0;
+    virtual Bounds3 objectBound() const = 0;
+
+    virtual Bounds3 worldBound() const {
+        return frame->toWorld(objectBound());
+    }
 
     virtual bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const = 0;
 
@@ -46,40 +53,9 @@ public:
         if (!intersect(ray, tHit, isect)) return 0;
         return (isect.p - ref.p).lengthSquared() / (absdot(isect.n, wi) * area());
     }
-};
-
-class TransformedShape : public Shape {
-public:
-    TransformedShape(const Frame& frame, const std::shared_ptr<Shape>& shape) noexcept
-        : frame(frame), shape(shape)
-    { }
-
-    Bounds3 getBounds() const override {
-        return frame.toWorld(shape->getBounds());
-    }
-
-    bool intersect(const Ray& ray, Float& tHit, Interaction& isect) const override {
-        auto newRay = frame.toLocal(ray);
-        if (!shape->intersect(newRay, tHit, isect)) return false;
-        isect = frame.toWorld(isect);
-        return true;
-    }
-
-    Float area() const override {
-        return shape->area();
-    }
-
-    Interaction sample(const Vector2f& u, Float& pdf) const override {
-        auto p = shape->sample(u, pdf);
-        Interaction isect;
-        isect.p = frame.toWorldP(p.p);
-        isect.n = frame.toWorldN(p.n);
-        return isect;
-    }
 
 public:
-    Frame frame;
-    std::shared_ptr<Shape> shape;
+    const Frame* frame;
 };
 
 }

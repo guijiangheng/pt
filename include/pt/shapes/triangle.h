@@ -48,10 +48,14 @@ public:
 class Triangle : public Shape {
 public:
     Triangle(const Mesh& mesh, int triangleIndex)
-        : mesh(mesh), indices(&mesh.indices[3 * triangleIndex])
+        : Shape(nullptr), mesh(mesh), indices(&mesh.indices[triangleIndex * 3])
     { }
 
-    Bounds3 getBounds() const override {
+    Bounds3 objectBound() const override {
+        return worldBound();
+    }
+
+    Bounds3 worldBound() const override {
         auto& a = mesh.vertices[indices[0]];
         auto& b = mesh.vertices[indices[1]];
         auto& c = mesh.vertices[indices[2]];

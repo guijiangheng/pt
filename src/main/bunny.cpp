@@ -29,7 +29,7 @@ int main() {
     std::vector<Primitive*> primitives;
 
     for (auto& triangle : triangles) {
-        primitives.push_back(new ShapePrimitive(triangle));
+        primitives.push_back(new GeometricPrimitive(triangle));
     }
 
     BVHAccel accel(std::move(primitives));

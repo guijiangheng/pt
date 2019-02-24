@@ -31,38 +31,38 @@ int main() {
     auto triangles = createTriangleMesh(walls);
     auto wallMaterial = std::make_shared<MatteMaterial>(Vector3(0.725, 0.71, 0.68));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, wallMaterial));
+        prims.push_back(new GeometricPrimitive(triangle, wallMaterial));
 
     auto rightWall = loadObjMesh("../assets/rightwall.obj");
     triangles = createTriangleMesh(rightWall);
     auto rightWallMaterial = std::make_shared<MatteMaterial>(Vector3(0.161, 0.133, 0.427));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, rightWallMaterial));
+        prims.push_back(new GeometricPrimitive(triangle, rightWallMaterial));
     
     auto leftWall = loadObjMesh("../assets/leftwall.obj");
     triangles = createTriangleMesh(leftWall);
     auto leftWallMaterial = std::make_shared<MatteMaterial>(Vector3(0.630, 0.065, 0.05));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, leftWallMaterial));
+        prims.push_back(new GeometricPrimitive(triangle, leftWallMaterial));
 
     auto sphere1 = loadObjMesh("../assets/sphere1.obj");
     triangles = createTriangleMesh(sphere1);
     auto sphere1Material = std::make_shared<MatteMaterial>(Vector3(0.630, 0.065, 0.05));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, sphere1Material));
+        prims.push_back(new GeometricPrimitive(triangle, sphere1Material));
     
     auto sphere2 = loadObjMesh("../assets/sphere2.obj");
     triangles = createTriangleMesh(sphere2);
     auto sphere2Material = std::make_shared<MatteMaterial>(Vector3(0.161, 0.133, 0.427));
     for (auto& triangle : triangles)
-        prims.push_back(new ShapePrimitive(triangle, sphere2Material));
+        prims.push_back(new GeometricPrimitive(triangle, sphere2Material));
     
     auto light = loadObjMesh("../assets/light.obj");
     triangles = createTriangleMesh(light);
     for (auto& triangle : triangles) {
         auto light = std::make_shared<DiffuseAreaLight>(triangle, Vector3(10));
         lights.push_back(light);
-        prims.push_back(new ShapePrimitive(triangle, nullptr, light));
+        prims.push_back(new GeometricPrimitive(triangle, nullptr, light));
     }
 
     BVHAccel accel(std::move(prims));

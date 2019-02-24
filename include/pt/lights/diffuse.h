@@ -17,16 +17,6 @@ public:
             , shape(shape), intensity(intensity), twoSided(twoSided)
     { }
 
-    DiffuseAreaLight(
-        const Frame& frame,
-        const std::shared_ptr<Shape>& shape,
-        const Vector3& intensity,
-        bool twoSided = false) noexcept
-            : Light(LightFlags::Area)
-            , shape(std::make_shared<TransformedShape>(frame, shape))
-            , intensity(intensity), twoSided(twoSided)
-    { }
-
     Vector3 le(const Interaction& pLight, const Vector3& wo) const {
         return (twoSided || dot(pLight.n, wo) > 0) ? intensity : Vector3(0);
     }
@@ -49,7 +39,6 @@ public:
 public:
     std::shared_ptr<Shape> shape;
     Vector3 intensity;
-    Float area;
     bool twoSided;
 };
 

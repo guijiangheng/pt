@@ -22,3 +22,5 @@ SAH找不到最好的划分就用穷举法，穷举法找不到就直接构造�
 ## Material::computeScatteringFunctions时可以不为isect生成bsdf,比如Matte材质Kd=0时
 
 ** 22 BVH注意处理shape为空
+
+** Shape的Area方法不用考虑变换，因为Area方法本来就是为面光源预留的接口
