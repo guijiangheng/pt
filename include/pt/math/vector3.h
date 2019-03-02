@@ -98,9 +98,17 @@ public:
         return std::sqrt(lengthSquared());
     }
 
+    Float maxComponent() const {
+        return x > y ? (x > z ? x : z) : (y > z ? y : z);
+    }
+
     Vector3& normalize() {
         *this /= length();
         return *this;        
+    }
+
+    bool isBlack() const {
+        return x == 0 && y == 0 && z == 0;
     }
 
     bool operator==(const Vector3& v) const {

@@ -45,11 +45,15 @@ public:
         return f;
     }
 
-    Vector3 sampleF(const Vector2f& u, const Vector3& woWorld, Vector3& wiWorld, Float& pdf) const {
+    Vector3 sampleF(
+            const Vector2f& u,
+            const Vector3& woWorld, Vector3& wiWorld,
+            Float& pdf, Float& etaScale) const {
+
         int n = std::floor(u[0] * nBxDFs);
         Vector2f uRemapped(u[0] * nBxDFs - n, u[1]);
         Vector3 wi, wo = toLocal(woWorld);
-        auto f = bxdfs[n]->sampleF(uRemapped, wo, wi, pdf);
+        auto f = bxdfs[n]->sampleF(uRemapped, wo, wi, pdf, etaScale);
 
         for (auto i = 0; i < nBxDFs; ++i) {
             if (i == n) continue;

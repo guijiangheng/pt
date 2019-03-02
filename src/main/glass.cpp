@@ -70,7 +70,7 @@ int main() {
         0, 0, 27.7856
     );
 
-    RandonSampler sampler(4);
+    RandonSampler sampler(512);
     PathIntegrator integrator(10, camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");

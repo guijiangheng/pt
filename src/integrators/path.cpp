@@ -8,8 +8,9 @@ namespace pt {
 
 Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
     Ray r(ray);
-    Vector3 l(0), beta(1);
+    auto etaScaleFix = 1;
     auto specularBounce = false;
+    Vector3 l(0), beta(1), rrBeta(1);
 
     for (auto bounce = 0; bounce < maxDepth; ++bounce) {
         Interaction isect;
@@ -24,27 +25,27 @@ Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
         }
 
         if (!foundIntersection) break;
-
         isect.computeScatteringFunctions();
-
         if (!isect.bsdf) break;
-
         l += beta * sampleOneLight(isect, scene);
 
-        Float pdf;
+        Float pdf, etaScale;
         Vector3 wi, wo = -r.d;
-        auto f = isect.bsdf->sampleF(sampler.get2D(), wo, wi, pdf);
+        auto f = isect.bsdf->sampleF(sampler.get2D(), wo, wi, pdf, etaScale);
 
-        if (f == Vector3(0)) break;
+        if (f.isBlack()) break;
         if (isect.bsdf->isDelta()) specularBounce = true;
 
         beta *= f * absdot(isect.n, wi) / pdf;
-        r = isect.spawnRay(wi);
+        etaScaleFix /= etaScale;
+        rrBeta = beta * etaScaleFix;
 
-        // if (bounce > 3) {
-        //     if (sampler.get1D() < (Float)0.8) break;
-        //     beta *= 5;
-        // }
+        r = isect.spawnRay(wi);
+        if (rrBeta.maxComponent() < 1 && bounce > 3) {
+            auto q = std::max((Float)0.05, 1 - rrBeta.maxComponent());
+            if (sampler.get1D() < q) break;
+            beta /= 1 - q;
+        }
     }
 
     return l;
@@ -64,9 +65,9 @@ Vector3 PathIntegrator::estimateDirect(
 
     Vector3 ld(0);
 
-    if (li != Vector3(0)) {
+    if (!li.isBlack()) {
         auto f = isect.bsdf->f(isect.wo, wi) * absdot(isect.n, wi);
-        if (f != Vector3(0) && tester.unoccluded(scene)) {
+        if (!f.isBlack() && tester.unoccluded(scene)) {
             if (light.isDelta()) {
                 ld += f * li / lightPdf;
             } else {
@@ -78,10 +79,10 @@ Vector3 PathIntegrator::estimateDirect(
 
     if (!light.isDelta() && !isect.bsdf->isDelta()) {
         Vector3 wi;
-        Float scatteringPdf;
-        auto f = isect.bsdf->sampleF(sampler.get2D(), isect.wo, wi, scatteringPdf);
+        Float scatteringPdf, etaScale;
+        auto f = isect.bsdf->sampleF(sampler.get2D(), isect.wo, wi, scatteringPdf, etaScale);
         f *= absdot(isect.n, wi);
-        if (f != Vector3(0)) {
+        if (!f.isBlack()) {
             lightPdf = light.pdf(isect, wi);
             if (lightPdf == 0) return ld;
             Interaction lightIsect;
@@ -94,7 +95,7 @@ Vector3 PathIntegrator::estimateDirect(
             } else {
                 li = light.le(ray);
             }
-            if (li != Vector3(0))
+            if (!li.isBlack())
                 ld += f * li * powerHeuristic(scatteringPdf, lightPdf) / scatteringPdf;
         }
     }

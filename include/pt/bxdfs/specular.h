@@ -26,9 +26,10 @@ public:
         return Vector3(0);
     }
 
-    Vector3 sampleF(const Vector2f& u, const Vector3& wo, Vector3& wi, Float& pdf) const override {
-        wi = Vector3(-wo.x, -wo.y, wo.z);
+    Vector3 sampleF(const Vector2f& u, const Vector3& wo, Vector3& wi, Float& pdf, Float& etaScale) const override {
         pdf = 1;
+        etaScale = 1;
+        wi = Vector3(-wo.x, -wo.y, wo.z);
         return r * fresnel->evaluate(CoordinateSystem::cosTheta(wi)) / CoordinateSystem::absCosTheta(wi);
     }
 

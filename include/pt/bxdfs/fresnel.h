@@ -21,7 +21,7 @@ public:
         return Vector3(0);
     }
     
-    Vector3 sampleF(const Vector2f& u, const Vector3& wo, Vector3& wi, Float& pdf) const override {
+    Vector3 sampleF(const Vector2f& u, const Vector3& wo, Vector3& wi, Float& pdf, Float& etaScale) const override {
         auto f = frDielectric(CoordinateSystem::cosTheta(wo), etaI, etaT);
 
         if (u[0] < f) {
@@ -35,8 +35,9 @@ public:
         auto tmpT = entering ? etaT : etaI;
         refract(wo, faceForward(Vector3(0, 0, 1), wo), tmpI / tmpT, wi);
         pdf = 1 - f;
+        etaScale = (tmpI * tmpI) / (tmpT * tmpT);
 
-        return t * (1 - f) * (tmpI * tmpI) / (tmpT * tmpT) / CoordinateSystem::absCosTheta(wi);
+        return t * (1 - f) * etaScale / CoordinateSystem::absCosTheta(wi);
     }
 
 private:
