@@ -8,7 +8,7 @@ namespace pt {
 
 Vector3 PathIntegrator::li(const Ray& ray, const Scene& scene) const {
     Ray r(ray);
-    auto etaScaleFix = 1;
+    auto etaScaleFix = (Float)1;
     auto specularBounce = false;
     Vector3 l(0), beta(1), rrBeta(1);
 

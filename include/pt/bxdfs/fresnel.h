@@ -27,6 +27,7 @@ public:
         if (u[0] < f) {
             wi = Vector3(-wo.x, -wo.y, wo.z);
             pdf = f;
+            etaScale = 1;
             return r * f / CoordinateSystem::absCosTheta(wi);
         }
 
