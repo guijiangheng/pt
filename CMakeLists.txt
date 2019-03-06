@@ -8,7 +8,7 @@ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
 
 set(PT_CORE_HEADERS
     include/pt/pt.h
-    
+
     include/pt/core/ray.h
     include/pt/core/frame.h
     include/pt/core/interaction.h
@@ -22,6 +22,7 @@ set(PT_CORE_HEADERS
     include/pt/core/integrator.h
     include/pt/core/parallel.h
     include/pt/core/light.h
+    include/pt/core/distrib.h
     include/pt/core/sampling.h
     include/pt/core/bxdf.h
     include/pt/core/bsdf.h
@@ -35,7 +36,7 @@ set(PT_CORE_HEADERS
     include/pt/math/matrix4.h
     include/pt/math/bounds2.h
     include/pt/math/bounds3.h
-    
+
     include/pt/lights/diffuse.h
     include/pt/lights/infinite.h
     include/pt/lights/point.h
@@ -81,3 +82,6 @@ target_link_libraries(table pt pthread)
 
 add_executable(dragon src/main/dragon.cpp)
 target_link_libraries(dragon pt pthread)
+
+add_executable(distribtest src/main/distribtest.cpp)
+target_link_libraries(distribtest pt pthread)

@@ -6,9 +6,9 @@
 
 namespace pt {
 
-class RandonSampler : public Sampler {
+class RandomSampler : public Sampler {
 public:
-    explicit RandonSampler(std::uint64_t samplesPerPixel) noexcept
+    explicit RandomSampler(std::uint64_t samplesPerPixel) noexcept
         : Sampler(samplesPerPixel)
         , device()
         , generator(device())
@@ -16,7 +16,7 @@ public:
     { }
 
     std::unique_ptr<Sampler> clone(int seed) const override {
-        return std::unique_ptr<Sampler>(new RandonSampler(samplesPerPixel));
+        return std::unique_ptr<Sampler>(new RandomSampler(samplesPerPixel));
     }
 
     Float get1D() override {

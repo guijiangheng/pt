@@ -50,7 +50,7 @@ int main() {
         0, 0, 30
     );
 
-    RandonSampler sampler(1);
+    RandomSampler sampler(1);
     NormalIntegrator integrator(camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");

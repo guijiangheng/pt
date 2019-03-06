@@ -1,6 +1,7 @@
 #ifndef PT_CORE_SAMPLER_H
 #define PT_CORE_SAMPLER_H
 
+#include <memory>
 #include <cstdint>
 #include <pt/math/vector2.h>
 #include <pt/core/camera.h>
@@ -18,7 +19,7 @@ public:
     virtual std::unique_ptr<Sampler> clone(int seed) const = 0;
 
     virtual Float get1D() = 0;
-    
+
     virtual Vector2f get2D() = 0;
 
     void startPixel() {

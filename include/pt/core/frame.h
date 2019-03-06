@@ -1,6 +1,7 @@
 #ifndef PT_CORE_FRAME_H
 #define PT_CORE_FRAME_H
 
+#include <pt/math/bounds3.h>
 #include <pt/math/matrix4.h>
 #include <pt/core/interaction.h>
 

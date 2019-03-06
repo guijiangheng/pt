@@ -67,7 +67,7 @@ int main() {
     auto glass2Material = std::make_shared<GlassMaterial>(Vector3(1), Vector3(1), 1.5);
     for (auto& triangle : triangles)
         prims.push_back(new GeometricPrimitive(triangle, glass2Material));
-    
+
     auto glass3Mesh = Mesh(
         Frame::translate(-1, 0, 0),
         loadObjMesh("../assets/table/mesh_4.obj")
@@ -76,7 +76,7 @@ int main() {
     auto glass3Material = std::make_shared<GlassMaterial>(Vector3(1), Vector3(1), 0.8866667);
     for (auto& triangle : triangles)
         prims.push_back(new GeometricPrimitive(triangle, glass3Material));
-    
+
     BVHAccel accel(std::move(prims));
     Scene scene(accel, std::move(lights));
     Film film(
@@ -94,7 +94,7 @@ int main() {
         0, 0, 35
     );
 
-    RandonSampler sampler(512);
+    RandomSampler sampler(512);
     PathIntegrator integrator(20, camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");

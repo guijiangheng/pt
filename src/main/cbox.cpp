@@ -38,7 +38,7 @@ int main() {
     auto rightWallMaterial = std::make_shared<MatteMaterial>(Vector3(0.161, 0.133, 0.427));
     for (auto& triangle : triangles)
         prims.push_back(new GeometricPrimitive(triangle, rightWallMaterial));
-    
+
     auto leftWall = loadObjMesh("../assets/leftwall.obj");
     triangles = createTriangleMesh(leftWall);
     auto leftWallMaterial = std::make_shared<MatteMaterial>(Vector3(0.630, 0.065, 0.05));
@@ -50,13 +50,13 @@ int main() {
     auto sphere1Material = std::make_shared<MatteMaterial>(Vector3(0.630, 0.065, 0.05));
     for (auto& triangle : triangles)
         prims.push_back(new GeometricPrimitive(triangle, sphere1Material));
-    
+
     auto sphere2 = loadObjMesh("../assets/sphere2.obj");
     triangles = createTriangleMesh(sphere2);
     auto sphere2Material = std::make_shared<MatteMaterial>(Vector3(0.161, 0.133, 0.427));
     for (auto& triangle : triangles)
         prims.push_back(new GeometricPrimitive(triangle, sphere2Material));
-    
+
     auto light = loadObjMesh("../assets/light.obj");
     triangles = createTriangleMesh(light);
     for (auto& triangle : triangles) {
@@ -82,7 +82,7 @@ int main() {
         0, 0, 27.7856
     );
 
-    RandonSampler sampler(64);
+    RandomSampler sampler(64);
     PathIntegrator integrator(5, camera, sampler);
     integrator.render(scene);
     film.writeImage("./image.pfm");
