@@ -1,6 +1,7 @@
 #ifndef PT_MATH_VECTOR2_H
 #define PT_MATH_VECTOR2_H
 
+#include <cmath>
 #include <pt/pt.h>
 
 namespace pt {
@@ -17,9 +18,7 @@ public:
     { }
 
     template <typename U>
-    explicit Vector2(const Vector2<U>& rhs) noexcept
-        : x((T)rhs.x)
-        , y((T)rhs.y)
+    explicit Vector2(const Vector2<U>& v) noexcept : x((T)v.x), y((T)v.y)
     { }
 
     Float& operator[](int index) {
@@ -73,6 +72,29 @@ public:
 
 using Vector2i = Vector2<int>;
 using Vector2f = Vector2<Float>;
+
+inline Vector2f floor(const Vector2f& p) {
+    return Vector2f(std::floor(p.x), std::floor(p.y));
+}
+
+inline Vector2f ceil(const Vector2f& p) {
+    return Vector2f(std::ceil(p.x), std::ceil(p.y));
+}
+
+template <typename T>
+Vector2<T> abs(const Vector2<T>& p) {
+    return Vector2<T>(std::abs(p.x), std::abs(p.y));
+}
+
+template <typename T>
+Vector2<T> max(const Vector2<T>& a, const Vector2<T>& b) {
+    return Vector2<T>(std::max(a.x, b.x), std::max(a.y, b.y));
+}
+
+template <typename T>
+Vector2<T> min(const Vector2<T>& a, const Vector2<T>& b) {
+    return Vector2<T>(std::min(a.x, b.x), std::min(a.y, b.y));
+}
 
 }
 

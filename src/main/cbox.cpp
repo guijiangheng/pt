@@ -6,6 +6,7 @@
 #include <pt/cameras/perspective.h>
 #include <pt/samplers/random.h>
 #include <pt/integrators/path.h>
+#include <pt/filters/gaussian.h>
 
 using namespace pt;
 
@@ -67,9 +68,12 @@ int main() {
 
     BVHAccel accel(std::move(prims));
     Scene scene(accel, std::move(lights));
+    auto filter = std::make_unique<GaussianFilter>(2.0, 2.0);
+
     Film film(
         Vector2i(800, 600),
-        Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
+        Bounds2f(Vector2f(0, 0), Vector2f(1, 1)),
+        std::move(filter)
     );
     PerspectiveCamera camera(
         Frame::scale(-1, 1, 1) * Frame::lookAt(

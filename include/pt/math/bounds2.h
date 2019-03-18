@@ -23,6 +23,11 @@ public:
         : pMin(pMin), pMax(pMax)
     { }
 
+    template <typename U>
+    explicit Bounds2(const Bounds2<U>& b) noexcept
+        : pMin((Vector2<T>)b.pMin), pMax((Vector2<T>)b.pMax)
+    { }
+
     Vector2<T> diag() const {
         return pMax - pMin;
     }
@@ -38,6 +43,11 @@ public:
 
 using Bounds2i = Bounds2<int>;
 using Bounds2f = Bounds2<Float>;
+
+template <typename T>
+Bounds2<T> intersect(const Bounds2<T>& a, const Bounds2<T>& b) {
+    return Bounds2<T>(max(a.pMin, b.pMin), min(a.pMax, b.pMax));
+}
 
 class Bounds2iIterator : public std::forward_iterator_tag {
 public:

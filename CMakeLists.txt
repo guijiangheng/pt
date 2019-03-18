@@ -24,6 +24,7 @@ set(PT_CORE_HEADERS
     include/pt/core/light.h
     include/pt/core/distrib.h
     include/pt/core/sampling.h
+    include/pt/core/filter.h
     include/pt/core/bxdf.h
     include/pt/core/bsdf.h
     include/pt/core/material.h
@@ -43,6 +44,10 @@ set(PT_CORE_HEADERS
 
     include/pt/utils/objloader.h
     include/pt/utils/plyloader.h
+
+    include/pt/filters/box.h
+    include/pt/filters/triangle.h
+    include/pt/filters/gaussian.h
 )
 
 set(PT_CORE_SRCS

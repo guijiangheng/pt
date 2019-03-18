@@ -5,6 +5,7 @@
 #include <pt/accelerators/bvh.h>
 #include <pt/shapes/triangle.h>
 #include <pt/utils/objloader.h>
+#include <pt/filters/gaussian.h>
 
 using namespace pt;
 using namespace std;
@@ -34,10 +35,12 @@ int main() {
 
     BVHAccel accel(std::move(primitives));
     Scene scene(accel);
+    auto filter = std::make_unique<GaussianFilter>(2.0, 2.0);
 
     Film film(
         Vector2i(512, 512),
-        Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
+        Bounds2f(Vector2f(0, 0), Vector2f(1, 1)),
+        std::move(filter)
     );
 
     PerspectiveCamera camera(

@@ -7,6 +7,7 @@
 #include <pt/cameras/perspective.h>
 #include <pt/samplers/random.h>
 #include <pt/integrators/path.h>
+#include <pt/filters/gaussian.h>
 
 using namespace pt;
 using namespace std;
@@ -26,10 +27,12 @@ int main() {
     lights.push_back(std::make_shared<PointLight>(Vector3(-20, 40, -20), Vector3(2995)));
 
     Scene scene(accel, std::move(lights));
+    auto filter = std::make_unique<GaussianFilter>(2.0, 2.0);
 
     Film film(
         Vector2i(800, 800),
-        Bounds2f(Vector2f(0, 0), Vector2f(1, 1))
+        Bounds2f(Vector2f(0, 0), Vector2f(1, 1)),
+        std::move(filter)
     );
 
     PerspectiveCamera camera(
