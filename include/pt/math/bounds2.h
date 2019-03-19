@@ -37,6 +37,10 @@ public:
         return d.x * d.y;
     }
 
+    bool isDegenerate() const {
+        return pMin.x >= pMax.x || pMin.y >= pMax.y;
+    }
+
 public:
     Vector2<T> pMin, pMax;
 };
@@ -97,7 +101,9 @@ inline Bounds2iIterator begin(const Bounds2i& bounds) {
 }
 
 inline Bounds2iIterator end(const Bounds2i& bounds) {
-    return Bounds2iIterator(bounds, Vector2i(bounds.pMin.x, bounds.pMax.y));
+    auto pEnd = bounds.isDegenerate() ?
+            bounds.pMin : Vector2i(bounds.pMin.x, bounds.pMax.y);
+    return Bounds2iIterator(bounds, pEnd);
 }
 
 }

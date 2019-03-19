@@ -35,11 +35,12 @@ public:
             floor(pFilm + Vector2f(0.5) + Vector2f(filterRadius))
         );
         bounds = intersect(bounds, pixelBounds);
-        for (const auto& p : bounds) {
+        for (auto p : bounds) {
             auto& pixel = getPixel(p);
             auto dist = pFilm - ((Vector2f)p + Vector2f(0.5));
             auto offset = (Vector2i)floor(abs(dist * invFilterRadius * filterTableWidth));
-            auto filterWeight = filterTable[offset.x] * filterTable[offset.y];
+            auto filterWeight = filterTable[std::min(offset.x, filterTableWidth)] *
+                                filterTable[std::min(offset.y, filterTableWidth)];
             pixel.filterWeight += filterWeight;
             pixel.color += color * filterWeight;
         }
@@ -66,8 +67,8 @@ private:
 
 class Film {
 public:
-    Film(const Vector2i& resolution, const Bounds2f& cropWindow, std::unique_ptr<Filter>&& filter)
-        : filter(std::move(filter))
+    Film(const Vector2i& resolution, const Bounds2f& cropWindow, std::unique_ptr<Filter>&& _filter)
+        : filter(std::move(_filter))
         , resolution(resolution)
         , pixelBounds(
             Vector2i(std::ceil(resolution.x * cropWindow.pMin.x), std::ceil(resolution.y * cropWindow.pMin.y)),
