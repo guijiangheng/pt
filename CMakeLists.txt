@@ -30,6 +30,7 @@ set(PT_CORE_HEADERS
     include/pt/core/material.h
     include/pt/core/coordinate.h
     include/pt/core/visibilitytester.h
+    include/pt/core/texture.h
 
     include/pt/math/math.h
     include/pt/math/vector2.h
@@ -48,9 +49,14 @@ set(PT_CORE_HEADERS
     include/pt/filters/box.h
     include/pt/filters/triangle.h
     include/pt/filters/gaussian.h
-)
 
-set(PT_CORE_SRCS
+    include/pt/textures/mix.h
+    include/pt/textures/scale.h
+    include/pt/textures/image.h
+    include/pt/textures/constant.h
+    )
+    
+    set(PT_CORE_SRCS
     src/core/parallel.cpp
     src/core/fresnel.cpp
     src/core/interaction.cpp

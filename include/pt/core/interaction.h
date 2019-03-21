@@ -46,6 +46,7 @@ public:
     void computeScatteringFunctions();
 
 public:
+    Vector2f uv;
     Vector3 p;
     Vector3 n;
     Vector3 wo;
