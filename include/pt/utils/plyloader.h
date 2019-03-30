@@ -454,8 +454,8 @@ public:
     }
 
 public:
-    size_t count;
     std::string name;
+    size_t count;
     std::vector<std::unique_ptr<Property>> properties;
 };
 
@@ -572,14 +572,14 @@ public:
 
     void parseBinaryBody(std::ifstream& stream) {
         for (auto& element : elements)
-            for (auto i = 0; i < element.count; ++i)
+            for (std::size_t i = 0; i < element.count; ++i)
                 for (auto& property : element.properties)
                     property->read(stream);
     }
 
     void parseTextBody(std::ifstream& stream) {
         for (auto& element : elements)
-            for (auto i = 0; i < element.count; ++i) {
+            for (std::size_t i = 0; i < element.count; ++i) {
                 std::string line;
                 std::getline(stream, line);
                 std::istringstream lineStream(line);

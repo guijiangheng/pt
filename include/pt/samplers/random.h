@@ -36,6 +36,6 @@ private:
     std::uniform_real_distribution<Float> distribution;
 };
 
-};
+}
 
 #endif

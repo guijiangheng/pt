@@ -56,7 +56,7 @@ Bounds2<T> intersect(const Bounds2<T>& a, const Bounds2<T>& b) {
 class Bounds2iIterator : public std::forward_iterator_tag {
 public:
     Bounds2iIterator(const Bounds2i& bounds, const Vector2i& p) noexcept
-        : bounds(&bounds), p(p)
+        : p(p), bounds(&bounds)
     { }
 
     Bounds2iIterator& operator++() {

@@ -22,9 +22,9 @@ public:
     FilmTile(const Bounds2i& pixelBounds, Float filterRadius,
              const Float* filterTable, int filterTableWidth)
         : pixelBounds(pixelBounds)
+        , filterTable(filterTable)
         , filterRadius(filterRadius)
         , invFilterRadius(1 / filterRadius)
-        , filterTable(filterTable)
         , filterTableWidth(filterTableWidth) {
         pixels = std::unique_ptr<Pixel[]>(new Pixel[pixelBounds.area()]);
     }
@@ -68,12 +68,12 @@ private:
 class Film {
 public:
     Film(const Vector2i& resolution, const Bounds2f& cropWindow, std::unique_ptr<Filter>&& _filter)
-        : filter(std::move(_filter))
-        , resolution(resolution)
+        : resolution(resolution)
         , pixelBounds(
             Vector2i(std::ceil(resolution.x * cropWindow.pMin.x), std::ceil(resolution.y * cropWindow.pMin.y)),
-            Vector2i(std::ceil(resolution.x * cropWindow.pMax.x), std::ceil(resolution.y * cropWindow.pMax.y))
-        ) {
+            Vector2i(std::ceil(resolution.x * cropWindow.pMax.x), std::ceil(resolution.y * cropWindow.pMax.y)))
+        , filter(std::move(_filter)) {
+            
         pixels = std::unique_ptr<Pixel[]>(new Pixel[pixelBounds.area()]);
         for (auto i = 0; i < filterTableWidth; ++i)
             filterTable[i] = filter->evaluate((i + (Float)0.5) * filter->radius / filterTableWidth);

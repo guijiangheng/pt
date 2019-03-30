@@ -131,9 +131,8 @@ public:
 std::vector<std::shared_ptr<Shape>> createTriangleMesh(const Mesh& mesh) {
     std::vector<std::shared_ptr<Shape>> trianles;
     auto nTriangles = mesh.indices.size() / 3;
-    for (auto i = 0; i < nTriangles; ++i) {
+    for (unsigned long i = 0; i < nTriangles; ++i)
         trianles.push_back(std::make_shared<Triangle>(mesh, i));
-    }
     return trianles;
 }
 

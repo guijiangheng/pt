@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <limits>
+#include <algorithm>
 #include <pt/pt.h>
 
 namespace pt {

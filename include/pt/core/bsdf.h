@@ -85,8 +85,8 @@ public:
 
 private:
     static constexpr int MaxBxDFs = 8;
-    CoordinateSystem coord;
     int nBxDFs;
+    CoordinateSystem coord;
     BxDF* bxdfs[MaxBxDFs];
 };
 

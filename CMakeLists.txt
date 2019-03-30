@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
-project(pt CXX)
+project(pt LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;MinSzieRel;RelWithDebInfo")
+endif()
 
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+add_compile_options(-Wall -Wextra -pedantic -Wno-unused-parameter -Werror)
 
 set(PT_CORE_HEADERS
     include/pt/pt.h
@@ -54,9 +56,9 @@ set(PT_CORE_HEADERS
     include/pt/textures/scale.h
     include/pt/textures/image.h
     include/pt/textures/constant.h
-    )
+)
     
-    set(PT_CORE_SRCS
+set(PT_CORE_SRCS
     src/core/parallel.cpp
     src/core/fresnel.cpp
     src/core/interaction.cpp
@@ -66,33 +68,28 @@ set(PT_CORE_HEADERS
     src/accelerators/bvh.cpp
 )
 
-include_directories(include)
+find_package(Threads)
 
 add_library(pt STATIC
     ${PT_CORE_HEADERS}
     ${PT_CORE_SRCS}
 )
 
+target_include_directories(pt PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(pt PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(pt PRIVATE cxx_std_17)
+    
 add_executable(bunny src/main/bunny.cpp)
-target_link_libraries(bunny pt pthread)
-
 add_executable(ajax src/main/ajax.cpp)
-target_link_libraries(ajax pt pthread)
-
 add_executable(point src/main/point.cpp)
-target_link_libraries(point pt pthread)
-
 add_executable(cbox src/main/cbox.cpp)
-target_link_libraries(cbox pt pthread)
-
 add_executable(glass src/main/glass.cpp)
-target_link_libraries(glass pt pthread)
-
 add_executable(table src/main/table.cpp)
-target_link_libraries(table pt pthread)
-
 add_executable(dragon src/main/dragon.cpp)
-target_link_libraries(dragon pt pthread)
-
 add_executable(distribtest src/main/distribtest.cpp)
-target_link_libraries(distribtest pt pthread)
+
+set(PT_ALL_EXES bunny ajax point cbox glass table dragon distribtest)
+foreach(target ${PT_ALL_EXES})
+    target_link_libraries(${target} PRIVATE pt)
+    target_compile_features(${target} PRIVATE cxx_std_17)
+endforeach()

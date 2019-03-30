@@ -21,12 +21,12 @@ struct LinearBVHNode {
 
     // leaf node constructor
     LinearBVHNode(const Bounds3& bounds, int primsOffset, uint16_t nPrims)
-        : bounds(bounds), primsOffset(primsOffset), nPrims(nPrims)
+        : bounds(bounds), nPrims(nPrims), primsOffset(primsOffset)
     { }
 
     // interior node constructor
     LinearBVHNode(const Bounds3& bounds, uint16_t splitAxis)
-        : bounds(bounds), splitAxis(splitAxis), nPrims(0)
+        : bounds(bounds), nPrims(0), splitAxis(splitAxis)
     { }
 };
 

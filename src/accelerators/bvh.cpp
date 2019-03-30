@@ -22,9 +22,9 @@ struct BVHNode {
 
     BVHNode(const Bounds3& b, int primsOffset, int nPrims) noexcept
         : bounds(b)
+        , left(nullptr), right(nullptr)
         , primsOffset(primsOffset)
         , nPrims(nPrims)
-        , left(nullptr), right(nullptr)
     { }
 
     BVHNode(const Bounds3& bounds, int axis, BVHNode* left, BVHNode* right) noexcept
@@ -47,7 +47,7 @@ BVHAccel::BVHAccel(std::vector<Primitive*>&& prims) noexcept : primitives(std::m
     auto size = primitives.size();
     std::vector<PrimInfo> primInfos;
     primInfos.reserve(size);
-    for (auto i = 0; i < size; ++i)
+    for (std::size_t i = 0; i < size; ++i)
         primInfos.emplace_back(i, primitives[i]->worldBound());
 
     int totalNodes = 0;

@@ -1,3 +1,4 @@
+#include <vector>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -64,7 +65,7 @@ void workerThreadFunc() {
 }
 
 void parallelInit() {
-    auto maxThreads = std::thread::hardware_concurrency() - 1;
+    int maxThreads = std::max(std::thread::hardware_concurrency(), 1u) - 1;
     for (auto i = 0; i < maxThreads; ++i)
         threads.emplace_back(workerThreadFunc);
 }
@@ -99,7 +100,7 @@ void parallelFor1D(std::function<void(int64_t)> func, int64_t count, int chunkSi
         auto beg = loop.nextIndex;
         auto end = std::min(loop.nextIndex + chunkSize, loop.count);
         loop.nextIndex = end;
-        if (loop.nextIndex = loop.count) workList = loop.next;
+        if (loop.nextIndex == loop.count) workList = loop.next;
         ++loop.activeThreads;
         lock.unlock();
         for (auto i = beg; i < end; ++i) loop.func1D(i);
