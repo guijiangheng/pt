@@ -7,7 +7,7 @@
 #include <pt/cameras/perspective.h>
 #include <pt/samplers/random.h>
 #include <pt/integrators/path.h>
-#include <pt/filters/gaussian.h>
+#include <pt/filters/box.h>
 
 using namespace pt;
 using namespace std;
@@ -27,7 +27,7 @@ int main() {
     lights.push_back(std::make_shared<PointLight>(Vector3(-20, 40, -20), Vector3(2995)));
 
     Scene scene(accel, std::move(lights));
-    auto filter = std::make_unique<GaussianFilter>(2.0, 2.0);
+    auto filter = std::make_unique<BoxFilter>(0.5);
 
     Film film(
         Vector2i(800, 800),
@@ -49,7 +49,7 @@ int main() {
     RandomSampler sampler(32);
     PathIntegrator integrator(1, camera, sampler);
     integrator.render(scene);
-    film.writeImage("./image.pfm");
+    film.writeImage("./image.exr");
 
     return 0;
 }

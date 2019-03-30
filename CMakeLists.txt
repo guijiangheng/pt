@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.0)
 project(pt LANGUAGES CXX)
 
+if (NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ext/openexr")
+    message(FATAL_ERROR "The OpenEXR submodule directory is missing! "
+        "You probably did not clone the project with --recursive. It is possible to recover by running "
+        "\"git submodule update --init --recursive\"")
+endif()
+
+add_subdirectory(ext)
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;MinSzieRel;RelWithDebInfo")
@@ -70,14 +78,30 @@ set(PT_CORE_SRCS
 
 find_package(Threads)
 
+add_library(imageio STATIC
+    include/pt/utils/imageio.h
+    src/utils/imageio.cpp
+)
+
+# OpenEXR doesn't support c++17, compile it alone use c++14 and -Wno-deprecated flags
+target_include_directories(
+    imageio PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    ${OPENEXR_INCLUDE_DIRS}
+)
+
+target_compile_features(imageio PRIVATE cxx_std_14)
+target_compile_options(imageio PRIVATE -Wno-deprecated)
+target_link_libraries(imageio PRIVATE ${OPENEXR_LIBS} stdc++fs)
+
 add_library(pt STATIC
     ${PT_CORE_HEADERS}
     ${PT_CORE_SRCS}
 )
 
-target_include_directories(pt PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(pt PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(pt PRIVATE cxx_std_17)
+target_include_directories(pt PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(pt PRIVATE ${CMAKE_THREAD_LIBS_INIT} imageio)
     
 add_executable(bunny src/main/bunny.cpp)
 add_executable(ajax src/main/ajax.cpp)

@@ -3,11 +3,11 @@
 
 #include <mutex>
 #include <memory>
-#include <string>
-#include <fstream>
 #include <pt/math/vector3.h>
 #include <pt/math/bounds2.h>
 #include <pt/core/filter.h>
+#include <pt/utils/imageio.h>
+
 
 namespace pt {
 
@@ -26,6 +26,7 @@ public:
         , filterRadius(filterRadius)
         , invFilterRadius(1 / filterRadius)
         , filterTableWidth(filterTableWidth) {
+            
         pixels = std::unique_ptr<Pixel[]>(new Pixel[pixelBounds.area()]);
     }
 
@@ -114,18 +115,17 @@ public:
         return pixels[offset];
     }
 
-    void writeImage(const std::string& name) {
-        std::fstream file(name, std::ios::out | std::ios::binary);
-        auto diag = pixelBounds.diag();
-        auto width = diag.x, height = diag.y;
-        file << "PF\n" << width << " " << height << "\n-1\n";
-        for (auto y = height - 1; y >= 0; --y)
-            for (auto x = 0; x < width; ++x) {
-                auto& pixel = pixels[width * y + x];
-                auto color = pixel.color / pixel.filterWeight;
-                file.write((char*)&color, sizeof(Vector3));
-            }
-        file.close();
+    void writeImage(const std::string& filename) {
+        auto offset = 0;
+        std::unique_ptr<Float[]> rgbs(new Float[3 * pixelBounds.area()]);
+        for (auto p : pixelBounds) {
+            auto& pixel = getPixel(p);
+            auto rgb = pixel.color / pixel.filterWeight;
+            rgbs[offset++] = rgb.x;
+            rgbs[offset++] = rgb.y;
+            rgbs[offset++] = rgb.z;
+        }
+        pt::writeImage(filename, &rgbs[0], pixelBounds, resolution);
     }
 
 public:
