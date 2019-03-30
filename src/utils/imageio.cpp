@@ -1,6 +1,7 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include <pt/utils/imageio.h>
+#include <lodepng/lodepng.h>
 #include <ImfRgba.h>
 #include <ImfRgbaFile.h>
 
@@ -33,6 +34,19 @@ static void writeImageEXR(const std::string& filename, const Float* rgbs,
     delete[] rgbas;
 }
 
+static void writeImagePNG(const std::string& filename, const Float* rgbs, int width, int height) {
+    auto offset = 0;
+    std::unique_ptr<std::uint8_t[]> bytes(new std::uint8_t[width * height * 3]);
+    for (auto y = 0; y < height; ++y)
+        for (auto x = 0; x < width; ++x) {
+            bytes[offset + 0] = (std::uint8_t)std::min(255 * rgbs[offset + 0], (Float)255);
+            bytes[offset + 1] = (std::uint8_t)std::min(255 * rgbs[offset + 1], (Float)255);
+            bytes[offset + 2] = (std::uint8_t)std::min(255 * rgbs[offset + 2], (Float)255);
+            offset += 3;
+        }
+    lodepng::encode(filename, &bytes[0], width, height, LCT_RGB);
+}
+
 void writeImage(const std::string& filename, const Float* rgbs,
                 const Bounds2i& outputBounds, const Vector2i& totalResolution) {
     auto extension = fs::path(filename).extension();
@@ -41,6 +55,8 @@ void writeImage(const std::string& filename, const Float* rgbs,
         writeImageEXR(filename, rgbs, outputBounds, totalResolution);
     } else if (extension == ".pfm") {
         writeImagePFM(filename, rgbs, diag.x, diag.y);
+    } else if (extension == ".png") {
+        writeImagePNG(filename, rgbs, diag.x, diag.y);
     } else {
         throw std::runtime_error("Output image file format not support!");
     }

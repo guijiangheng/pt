@@ -57,7 +57,7 @@ int main() {
     RandomSampler sampler(1);
     NormalIntegrator integrator(camera, sampler);
     integrator.render(scene);
-    film.writeImage("./image.exr");
+    film.writeImage("./image.png");
 
     return 0;
 }

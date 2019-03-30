@@ -88,11 +88,12 @@ target_include_directories(
     imageio PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     ${OPENEXR_INCLUDE_DIRS}
+    ${LODEPNG_INCLUDE_DIR}
 )
 
 target_compile_features(imageio PRIVATE cxx_std_14)
 target_compile_options(imageio PRIVATE -Wno-deprecated)
-target_link_libraries(imageio PRIVATE ${OPENEXR_LIBS} stdc++fs)
+target_link_libraries(imageio PRIVATE ${OPENEXR_LIBS} lodepng stdc++fs)
 
 add_library(pt STATIC
     ${PT_CORE_HEADERS}

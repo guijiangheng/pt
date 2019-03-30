@@ -49,7 +49,7 @@ int main() {
     RandomSampler sampler(32);
     PathIntegrator integrator(1, camera, sampler);
     integrator.render(scene);
-    film.writeImage("./image.exr");
+    film.writeImage("./image.png");
 
     return 0;
 }
