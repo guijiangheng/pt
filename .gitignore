@@ -6,4 +6,4 @@ cmake-build-minsizerel/**
 cmake-build-relwithdebinfo/**
 build/**
 assets/**
-ext/**
+ext/openexr/**
