@@ -102,7 +102,7 @@ int main() {
     RandomSampler sampler(512);
     PathIntegrator integrator(20, camera, sampler);
     integrator.render(scene);
-    film.writeImage("./image.pfm");
+    film.writeImage("./image.exr");
 
     return 0;
 }

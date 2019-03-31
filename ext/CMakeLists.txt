@@ -24,4 +24,3 @@ add_library(lodepng STATIC
 
 target_compile_features(lodepng PRIVATE cxx_std_17)
 set(LODEPNG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
-set(LODEPNG_LIB lodepng PARENT_SCOPE)

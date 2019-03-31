@@ -40,8 +40,8 @@ public:
             auto& pixel = getPixel(p);
             auto dist = pFilm - ((Vector2f)p + Vector2f(0.5));
             auto offset = (Vector2i)floor(abs(dist * invFilterRadius * filterTableWidth));
-            auto filterWeight = filterTable[std::min(offset.x, filterTableWidth)] *
-                                filterTable[std::min(offset.y, filterTableWidth)];
+            auto filterWeight = filterTable[std::min(offset.x, filterTableWidth - 1)] *
+                                filterTable[std::min(offset.y, filterTableWidth - 1)];
             pixel.filterWeight += filterWeight;
             pixel.color += color * filterWeight;
         }
