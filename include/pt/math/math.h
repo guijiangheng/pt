@@ -36,6 +36,16 @@ inline bool quadratic(Float a, Float b, Float c, Float& t0, Float& t1) {
     return true;
 }
 
+inline Float gammaCorrect(Float value) {
+    if (value <= 0.0031308f) return 12.92f * value;
+    return 1.055f * std::pow(value, (Float)(1.f / 2.4f)) - 0.055f;
+}
+
+inline Float inverseGammaCorrect(Float value) {
+    if (value <= 0.04045f) return value * 1.f / 12.92f;
+    return std::pow((value + 0.055f) * 1.f / 1.055f, (Float)2.4f);
+}
+
 }
 
 #endif
