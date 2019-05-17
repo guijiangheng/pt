@@ -5,12 +5,6 @@
 #include <pt/core/interaction.h>
 
 namespace pt {
-    
-class TextureMapping2D {
-public:
-    virtual ~TextureMapping2D() = default;
-    virtual Vector2f map(const Interaction& isect) const = 0;
-};
 
 class TextureMapping2D {
 public:
@@ -49,4 +43,3 @@ public:
 }
 
 #endif
-

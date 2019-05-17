@@ -74,6 +74,7 @@ set(PT_CORE_SRCS
     src/math/matrix4.cpp
     src/integrators/path.cpp
     src/accelerators/bvh.cpp
+    src/textures/image.cpp
 )
 
 find_package(Threads)
